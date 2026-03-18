@@ -9,7 +9,7 @@ public class Cliente {
 	private String correo;
 	private String direccion;
 	public Cliente(String dni, String nom, String apellido, String telefono, String correo, String direccion) {
-		super();
+		
 		this.dni = dni;
 		this.nom = nom;
 		this.apellido = apellido;
