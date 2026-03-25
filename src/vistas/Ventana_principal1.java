@@ -52,7 +52,6 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 	public Ventana_principal1() {
 		setTitle("Inicio: Okapi");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 480);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -89,10 +88,10 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		root.add(Box.createVerticalStrut(24));
 
 		String[][] buttons = { 
-				{ "📦", "Producto" }, 
-				{ "👷", "Trabajador" }, 
-				{ "🛡", "Administrador" },
-				{ "👤", "Cliente" } };
+				{ "📦", "Product" }, 
+				{ "👷", "Employee" }, 
+				{ "🛡", "Admin" },
+				{ "👤", "Client" } };
 		
 		btnProducto = createButton(buttons[0][0], buttons[0][1]);
 		btnTrabajador = createButton(buttons[1][0], buttons[1][1]);
@@ -154,9 +153,8 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnProducto) {
-        	vProducto = new Vista_Producto();
-        	vProducto.setVisible(true);
-        	this.setVisible(false);
+        	Vista_Producto.main(new String[3]); //Llamo al Main de la vista Producto.
+        	dispose();
         }
         if (e.getSource() == btnTrabajador) {
         	vTrabajador = new Vista_Trabajador();

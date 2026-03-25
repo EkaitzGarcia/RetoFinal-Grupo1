@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Panel;
 import javax.swing.JTable;
@@ -24,12 +26,12 @@ public class Vista_Producto extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private Vista_Producto vProducto;
+	private static Ventana_principal1 principal;
 	
 	//Botones.
 	private JButton btnVolver, btnAlta;
 	
 	//Vistas.
-	private Ventana_principal1 principal;
 	private JLabel lblNewLabel;
 	private JTable table;
 
@@ -39,7 +41,15 @@ public class Vista_Producto extends JDialog implements ActionListener {
 	public static void main(String[] args) {
 		try {
 			Vista_Producto dialog = new Vista_Producto();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); //Al darle a la X no finaliza el programa.
+			dialog.addWindowListener(new WindowAdapter() {
+			    @Override
+			    public void windowClosing(WindowEvent e) {
+			    	principal = new Ventana_principal1();
+			    	principal.setVisible(true);
+			        dialog.dispose();
+			    }
+			});
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,7 +71,7 @@ public class Vista_Producto extends JDialog implements ActionListener {
 			{
 				btnVolver = new JButton("Back");
 				btnVolver.addActionListener(this);
-				btnVolver.setBounds(31, 5, 99, 23);
+				btnVolver.setBounds(31, 5, 124, 23);
 				btnVolver.setActionCommand("Back");
 				buttonPane.add(btnVolver);
 				getRootPane().setDefaultButton(btnVolver);
@@ -69,7 +79,7 @@ public class Vista_Producto extends JDialog implements ActionListener {
 			{
 				btnAlta = new JButton("Add Product");
 				btnAlta.addActionListener(this);
-				btnAlta.setBounds(1172, 5, 99, 23);
+				btnAlta.setBounds(1147, 5, 124, 23);
 				btnAlta.setActionCommand("Close");
 				buttonPane.add(btnAlta);
 			}
@@ -101,9 +111,16 @@ public class Vista_Producto extends JDialog implements ActionListener {
 		}
 		
 		if(e.getSource() == btnAlta) {
-			//Llamar al método para dar de alta el producto
+			//Llamar al método para dar de alta el producto (la pestaña)
 		}
 		
 		
 	}
+	
+
+	/*public void windowClosing(WindowEvent e) {
+		principal = new Ventana_principal1();
+		principal.setVisible(true);
+		this.dispose();
+	}*/
 }
