@@ -5,6 +5,7 @@ import modelo.Producto;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -79,6 +80,13 @@ public class Vista_Producto extends JDialog implements ActionListener {
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
         table.setCellSelectionEnabled(true);
         table.setFillsViewportHeight(true);
+
+        // Centrar el contenido de todas las columnas
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < columnas.length; i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(41, 103, 1237, 547);
