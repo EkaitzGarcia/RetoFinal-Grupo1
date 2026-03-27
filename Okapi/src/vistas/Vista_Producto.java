@@ -1,122 +1,136 @@
-
 package vistas;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import modelo.AccesoBD;
+import modelo.Producto;
 
-import modelo.*;
-import vistas.*;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
-import java.awt.Panel;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
-import java.awt.Font;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.awt.Color;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Vista_Producto extends JDialog implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
-	private Vista_Producto vProducto;
-	private static Ventana_principal1 principal;
-	private Alta_Producto alta;
-	
-	//Botones.
-	private JButton btnVolver, btnAlta;
-	
-	//Vistas.
-	private JLabel lblNewLabel;
-	private JTable table;
+    private static final long serialVersionUID = 1L;
+    private static Ventana_principal1 principal;
+    private Alta_Producto alta;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Vista_Producto dialog = new Vista_Producto();
-			dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); //Al darle a la X no finaliza el programa.
-			dialog.addWindowListener(new WindowAdapter() {
-			    @Override
-			    public void windowClosing(WindowEvent e) {
-			    	principal = new Ventana_principal1();
-			    	principal.setVisible(true);
-			        dialog.dispose();
-			    }
-			});
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    private JButton btnVolver, btnAlta;
+    private JLabel lblNewLabel;
+    private JTable table;
+    private DefaultTableModel modeloTabla;
 
-	/**
-	 * Create the dialog.
-	 */
-	public Vista_Producto() {
-		setTitle("Product list: Okapi");
-		setBounds(100, 100, 1330, 754);
-		getContentPane().setLayout(null);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 673, 1306, 34);
-			getContentPane().add(buttonPane);
-			buttonPane.setLayout(null);
-			{
-				btnVolver = new JButton("Back");
-				btnVolver.addActionListener(this);
-				btnVolver.setBounds(31, 5, 124, 23);
-				btnVolver.setActionCommand("Back");
-				buttonPane.add(btnVolver);
-				getRootPane().setDefaultButton(btnVolver);
-			}
-			{
-				btnAlta = new JButton("Add Product");
-				btnAlta.addActionListener(this);
-				btnAlta.setBounds(1147, 5, 124, 23);
-				btnAlta.setActionCommand("Close");
-				buttonPane.add(btnAlta);
-			}
-		}
-		
-		
-		{
-			table = new JTable();
-			table.setBorder(new LineBorder(new Color(0, 0, 0)));
-			table.setCellSelectionEnabled(true);
-			table.setBounds(41, 103, 1237, 547);
-			getContentPane().add(table);
-		}
-		{
-			lblNewLabel = new JLabel("Available Products:");
-			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lblNewLabel.setBounds(45, 62, 132, 31);
-			getContentPane().add(lblNewLabel);
-		}
-	}
+    public static void main(String[] args) {
+        try {
+            Vista_Producto dialog = new Vista_Producto(); // CORRECCIÓN: era Vista_Producto
+            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+            dialog.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    principal = new Ventana_principal1();
+                    principal.setVisible(true);
+                    dialog.dispose();
+                }
+            });
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource() == btnVolver) {
-			principal = new Ventana_principal1();
-			principal.setVisible(true);
-			dispose();
-		}
-		
-		if(e.getSource() == btnAlta) {
-			alta = new Alta_Producto();
-			alta.setVisible(true);
-		}
-		
-		
-	}
+    public Vista_Producto() {
+        setTitle("Product list: Okapi");
+        setBounds(100, 100, 1330, 754);
+        getContentPane().setLayout(null);
+
+        JPanel buttonPane = new JPanel();
+        buttonPane.setBounds(0, 673, 1306, 34);
+        getContentPane().add(buttonPane);
+        buttonPane.setLayout(null);
+
+        btnVolver = new JButton("Back");
+        btnVolver.addActionListener(this);
+        btnVolver.setBounds(31, 5, 124, 23);
+        btnVolver.setActionCommand("Back");
+        buttonPane.add(btnVolver);
+        getRootPane().setDefaultButton(btnVolver);
+
+        btnAlta = new JButton("Add Product");
+        btnAlta.addActionListener(this);
+        btnAlta.setBounds(1147, 5, 124, 23);
+        buttonPane.add(btnAlta);
+
+        lblNewLabel = new JLabel("Available Products:");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lblNewLabel.setBounds(45, 62, 132, 31);
+        getContentPane().add(lblNewLabel);
+
+        String[] columnas = { "Reference", "Name", "Price (€)", "Discount (%)" };
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table = new JTable(modeloTabla);
+        table.setBorder(new LineBorder(new Color(0, 0, 0)));
+        table.setCellSelectionEnabled(true);
+        table.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(41, 103, 1237, 547);
+        getContentPane().add(scrollPane);
+
+        cargarProductos();
+    }
+
+    private void cargarProductos() {
+        Map<Integer, Producto> productos = new TreeMap<>();
+        AccesoBD acceso = new AccesoBD();
+
+        try {
+            acceso.verProductos(productos);
+
+            modeloTabla.setRowCount(0);
+
+            for (Producto p : productos.values()) {
+                Object[] fila = {
+                        p.getRef_producto(),
+                        p.getNom_prod(),
+                        String.format("%.2f", p.getPrecio()),
+                        p.getDescuento()
+                };
+                modeloTabla.addRow(fila);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar los productos:\n" + e.getMessage(),
+                    "Error de conexión",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnVolver) {
+            principal = new Ventana_principal1();
+            principal.setVisible(true);
+            dispose();
+        }
+        if (e.getSource() == btnAlta) {
+            alta = new Alta_Producto();
+            alta.setVisible(true);
+            alta.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent we) {
+                    cargarProductos();
+                }
+            });
+        }
+    }
 }
