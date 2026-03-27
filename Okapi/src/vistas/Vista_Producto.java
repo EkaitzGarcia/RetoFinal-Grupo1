@@ -94,6 +94,29 @@ public class Vista_Producto extends JDialog implements ActionListener {
         scrollPane.setBounds(41, 103, 1237, 547);
         getContentPane().add(scrollPane);
 
+        // Doble clic sobre una fila → abre la ventana de detalle/edición
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int fila = table.getSelectedRow();
+                    if (fila != -1) {
+                        // Obtiene la referencia del producto de la fila seleccionada
+                        int ref = (int) modeloTabla.getValueAt(fila, 0);
+
+                        // TODO: sustituye "Detalle_Producto" por el nombre real de tu ventana
+                        // Detalle_Producto detalle = new Detalle_Producto(ref);
+                        // detalle.setVisible(true);
+
+                        JOptionPane.showMessageDialog(null,
+                                "Doble clic en producto con referencia: " + ref,
+                                "Detalle producto",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
+
         cargarProductos();
     }
 
