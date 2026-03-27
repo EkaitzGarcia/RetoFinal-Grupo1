@@ -62,7 +62,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		root.setBorder(new EmptyBorder(40, 60, 30, 60));
 		setContentPane(root);
 
-		JLabel lblTitle = new JLabel("Panel de Gestión", SwingConstants.CENTER);
+		JLabel lblTitle = new JLabel("Management Panel", SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		lblTitle.setForeground(TEXT_PRIMARY);
 		lblTitle.setAlignmentX(CENTER_ALIGNMENT);
@@ -70,7 +70,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 		root.add(Box.createVerticalStrut(8));
 
-		JLabel lblSub = new JLabel("Selecciona una sección para continuar", SwingConstants.CENTER);
+		JLabel lblSub = new JLabel("Choose an option: ", SwingConstants.CENTER);
 		lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblSub.setForeground(TEXT_SUBTLE);
 		lblSub.setAlignmentX(CENTER_ALIGNMENT);
