@@ -80,6 +80,7 @@ public class Vista_Producto extends JDialog implements ActionListener {
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
         table.setCellSelectionEnabled(false);
         table.setRowSelectionAllowed(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setFillsViewportHeight(true);
 
         // Centrar el contenido de todas las columnas
