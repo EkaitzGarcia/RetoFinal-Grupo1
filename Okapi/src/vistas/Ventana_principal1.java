@@ -38,7 +38,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 	private Vista_Admin vAdmin;
 	private Vista_Trabajador vTrabajador;
 	private Vista_Cliente vCliente;
-	private Vista_Producto vProducto;
+	// private Vista_Producto vProducto;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
