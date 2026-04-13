@@ -30,7 +30,6 @@ import modelo.Cliente;
 public class Ventana_principal1 extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	// Paleta de colores
 	private static final Color BG_MAIN = new Color(117, 85, 64);
 	private static final Color ACCENT = new Color(248, 250, 252);
 	private static final Color BTN_NORMAL = new Color(126, 129, 115);
@@ -176,7 +175,6 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		}
 	}
 	
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnProducto) {
