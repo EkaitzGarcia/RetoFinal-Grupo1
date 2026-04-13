@@ -284,8 +284,11 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 			vTrabajador.setVisible(true);
 		}
 		if (e.getSource() == btnAdmin) {
-			vAdmin = new Vista_Admin();
-			vAdmin.setVisible(true);
+		    vAdmin = new Vista_Admin(this);
+		    this.setVisible(false);  // ocultamos la principal
+		    vAdmin.setVisible(true); // abrimos el admin
+		    // cuando el admin se cierra, el código continúa aquí
+		    this.setVisible(true);   // volvemos a mostrar la principal
 		}
 		if (e.getSource() == btnCliente) {
 			accesoBD();
