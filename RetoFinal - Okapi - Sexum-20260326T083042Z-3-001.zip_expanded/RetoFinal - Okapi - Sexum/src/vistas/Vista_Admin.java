@@ -75,6 +75,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
 
     private Ventana_principal1 vPrincipal;
     
+    
     public Vista_Admin(Ventana_principal1 padre) {
     	 this.vPrincipal = padre;
         setTitle("Panel Administrador");
@@ -455,6 +456,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
      * Da de alta un nuevo cliente en el sistema.
      */
     private void altaCliente() {
+    	if (!validarCliente()) return;
         Cliente c = new Cliente();
         c.setDni(txtDniC.getText().trim());
         c.setNom(txtNombreC.getText().trim());
@@ -489,6 +491,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
      * Modifica los datos del cliente cargado en el formulario.
      */
     private void modificarCliente() {
+    	 if (!validarCliente()) return;
         Cliente c = new Cliente();
         c.setDni(txtDniC.getText().trim());
         c.setNom(txtNombreC.getText().trim());
@@ -525,6 +528,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
      * Da de alta un nuevo trabajador usando el procedimiento almacenado.
      */
     private void altaTrabajador() {
+    	 if (!validarTrabajador()) return;
         Trabajador t = new Trabajador(
             txtNss.getText().trim(),
             txtNombreT.getText().trim(),
@@ -560,6 +564,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
      * Modifica los datos del trabajador cargado en el formulario.
      */
     private void modificarTrabajador() {
+    	 if (!validarTrabajador()) return;
         Trabajador t = new Trabajador(
             txtNss.getText().trim(),
             txtNombreT.getText().trim(),
@@ -586,6 +591,39 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnAltaTrab.setEnabled(true);
         btnBajaTrab.setEnabled(false);
         btnModificarTrab.setEnabled(false);
+    }
+    /**
+     * Valida que todos los campos del formulario de clientes estén rellenos.
+     *
+     * @return true si todos los campos tienen contenido, false si alguno está vacío
+     */
+    private boolean validarCliente() {
+        if (txtDniC.getText().trim().isEmpty() ||
+            txtNombreC.getText().trim().isEmpty() ||
+            txtApellidoC.getText().trim().isEmpty() ||
+            txtTelefonoC.getText().trim().isEmpty() ||
+            txtCorreoC.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Valida que todos los campos del formulario de trabajadores estén rellenos.
+     *
+     * @return true si todos los campos tienen contenido, false si alguno está vacío
+     */
+    private boolean validarTrabajador() {
+        if (txtNss.getText().trim().isEmpty() ||
+            txtNombreT.getText().trim().isEmpty() ||
+            txtApellidoT.getText().trim().isEmpty() ||
+            txtTelefonoT.getText().trim().isEmpty() ||
+            txtCorreoT.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     // =========================================================================
@@ -635,7 +673,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnBajaTrab.setEnabled(true);
         btnModificarTrab.setEnabled(true);
     }
-
+   
     public static void main(String[] args) {
         new Vista_Admin(null).setVisible(true);
     }
