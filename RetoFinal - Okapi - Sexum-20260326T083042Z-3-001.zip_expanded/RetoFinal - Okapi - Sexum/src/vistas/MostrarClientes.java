@@ -36,7 +36,7 @@ public class MostrarClientes extends JDialog {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(new BorderLayout());
 
-        String[] columnNames = {"DNI", "Nombre", "Apellido", "Teléfono", "Correo"};
+        String[] columnNames = {"DNI", "Nombre", "Apellido", "Teléfono", "Correo", "Direccion"};
         model = new DefaultTableModel(columnNames, 0) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -60,8 +60,9 @@ public class MostrarClientes extends JDialog {
                         String ape    = (String) model.getValueAt(row, 2);
                         String tel    = (String) model.getValueAt(row, 3);
                         String correo = (String) model.getValueAt(row, 4);
-                        dispose();
-                        padre.cargarDatosCliente(dni, nom, ape, tel, correo);
+                        String direccion = (String)model.getValueAt(row, 5);                        
+                        		dispose();
+                        padre.cargarDatosCliente(dni, nom, ape, tel, correo,direccion);
                         padre.setVisible(true);
                     }
                 }
@@ -80,7 +81,7 @@ public class MostrarClientes extends JDialog {
             List<Cliente> lista = new ArrayList<>();
             bd.getTodosClientes(lista);
 
-            Object[][] datos = new Object[lista.size()][5];
+            Object[][] datos = new Object[lista.size()][6];
             for (int i = 0; i < lista.size(); i++) {
                 Cliente c = lista.get(i);
                 datos[i][0] = c.getDni();
@@ -88,6 +89,7 @@ public class MostrarClientes extends JDialog {
                 datos[i][2] = c.getApellido();
                 datos[i][3] = c.getTelefono();
                 datos[i][4] = c.getCorreo();
+                datos[i][5]= c.getDireccion();
             }
             actualizarDatos(datos);
         } catch (Exception e) {

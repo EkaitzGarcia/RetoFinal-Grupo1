@@ -38,13 +38,14 @@ public class Principal {
      *
      * @param c Cliente a insertar
      */
-    public static void altaCliente(Cliente c) {
-        try {
-            AccesoBD bd = new AccesoBD();
-            bd.insertarCliente(c);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void altaCliente(Cliente c) throws Exception {
+        AccesoBD bd = new AccesoBD();
+        Map<String, Cliente> mapa = new HashMap<>();
+        bd.getTodosClientes(mapa);
+        if (mapa.containsKey(c.getDni())) {
+            throw new Exception("EL CLIENTE CON DNI " + c.getDni() + " YA EXISTE");
         }
+        bd.insertarCliente(c);
     }
 
     /**

@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,6 +26,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import controlador.Principal;
+import excepciones.DniException;
+import excepciones.FormatoIncorrectoException;
+import excepciones.NssException;
+import excepciones.TelefonoException;
 import modelo.Cliente;
 import modelo.Trabajador;
 
@@ -62,7 +68,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
     private JButton btnAltaCliente, btnBajaCliente, btnModificarCliente, btnLimpiarCliente;
 
     // ── Campos CLIENTES
-    private JTextField txtDniC, txtNombreC, txtApellidoC, txtTelefonoC, txtCorreoC;
+    private JTextField txtDniC, txtNombreC, txtApellidoC, txtTelefonoC, txtCorreoC,txtDireccionC;
 
     // ── Botones TRABAJADORES
     private JButton btnAltaTrab, btnBajaTrab, btnModificarTrab, btnLimpiarTrab;
@@ -73,8 +79,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
     // ── Botones INICIO
     private JButton btnVerClientes, btnVerTrabajadores;
 
-    private Ventana_principal1 vPrincipal;
-    
+    private Ventana_principal1 vPrincipal; 
     
     public Vista_Admin(Ventana_principal1 padre) {
     	 this.vPrincipal = padre;
@@ -136,7 +141,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
 
         JButton btnSalir = new JButton("  Salir");
-        btnSalir.setBounds(20, 330, 160, 55);  // abajo a la izquierda
+        btnSalir.setBounds(24, 331, 160, 55);  // abajo a la izquierda
         btnSalir.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
         btnSalir.setForeground(TEXT_PRIMARY);
         btnSalir.setBackground(BTN_DANGER);
@@ -231,6 +236,21 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtCorreoC.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         txtCorreoC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtCorreoC);
+        
+        JLabel lblDireccionC = new JLabel("Dirección:");
+        lblDireccionC.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblDireccionC.setForeground(TEXT_PRIMARY);
+        lblDireccionC.setBounds(50, 240, 140, 28);
+        panelClientes.add(lblDireccionC);
+
+        txtDireccionC = new JTextField(10);
+        txtDireccionC.setBounds(210, 240, 200, 28);
+        txtDireccionC.setBackground(FIELD_BG);
+        txtDireccionC.setForeground(TEXT_PRIMARY);
+        txtDireccionC.setCaretColor(TEXT_PRIMARY);
+        txtDireccionC.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txtDireccionC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
+        panelClientes.add(txtDireccionC);
 
         btnAltaCliente = new JButton("Alta");
         btnAltaCliente.setBounds(40, 290, 130, 35);
@@ -456,18 +476,34 @@ public class Vista_Admin extends JDialog implements ActionListener {
      * Da de alta un nuevo cliente en el sistema.
      */
     private void altaCliente() {
-    	if (!validarCliente()) return;
-        Cliente c = new Cliente();
-        c.setDni(txtDniC.getText().trim());
-        c.setNom(txtNombreC.getText().trim());
-        c.setApellido(txtApellidoC.getText().trim());
-        c.setTelefono(txtTelefonoC.getText().trim());
-        c.setCorreo(txtCorreoC.getText().trim());
-        c.setDireccion("");
-        Principal.altaCliente(c);
-        JOptionPane.showMessageDialog(this, "ALTA CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
-        limpiarClientes();
-        tabbedPane.setSelectedComponent(panelInicio);
+        if (!validarCliente()) return;
+        try {
+            validarDni(txtDniC.getText().trim());
+            validarTelefono(txtTelefonoC.getText().trim());
+            validarEmail(txtCorreoC.getText().trim());
+
+            Cliente c = new Cliente();
+            c.setDni(txtDniC.getText().trim());
+            c.setNom(txtNombreC.getText().trim());
+            c.setApellido(txtApellidoC.getText().trim());
+            c.setTelefono(txtTelefonoC.getText().trim());
+            c.setCorreo(txtCorreoC.getText().trim());
+            c.setDireccion(txtDireccionC.getText().trim());
+
+            Principal.altaCliente(c);
+            JOptionPane.showMessageDialog(this, "ALTA CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
+            limpiarClientes();
+            tabbedPane.setSelectedComponent(panelInicio);
+
+        } catch (DniException e) {
+            e.visualizarMsg();
+        } catch (FormatoIncorrectoException e) {
+            e.visualizarMsg();
+        } catch (TelefonoException e) {
+            e.visualizarMsg();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -492,18 +528,26 @@ public class Vista_Admin extends JDialog implements ActionListener {
      */
     private void modificarCliente() {
     	 if (!validarCliente()) return;
+    	  try {
+    		validarTelefono(txtTelefonoC.getText().trim());
+  			validarEmail(txtCorreoC.getText().trim());
         Cliente c = new Cliente();
         c.setDni(txtDniC.getText().trim());
         c.setNom(txtNombreC.getText().trim());
         c.setApellido(txtApellidoC.getText().trim());
         c.setTelefono(txtTelefonoC.getText().trim());
         c.setCorreo(txtCorreoC.getText().trim());
-        c.setDireccion("");
+        c.setDireccion(txtDireccionC.getText().trim());
         Principal.modificarCliente(c);
         JOptionPane.showMessageDialog(this, "MODIFICACIÓN CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
         limpiarClientes();
         tabbedPane.setSelectedComponent(panelInicio);
-    }
+    	  } catch (FormatoIncorrectoException e) {
+		    e.visualizarMsg();
+		}catch (TelefonoException e) {
+		    e.visualizarMsg();
+		}
+  }
 
     /**
      * Limpia los campos del formulario de clientes y restablece los botones.
@@ -515,6 +559,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtApellidoC.setText("");
         txtTelefonoC.setText("");
         txtCorreoC.setText("");
+        txtDireccionC.setText("");
         btnAltaCliente.setEnabled(true);
         btnBajaCliente.setEnabled(false);
         btnModificarCliente.setEnabled(false);
@@ -529,6 +574,10 @@ public class Vista_Admin extends JDialog implements ActionListener {
      */
     private void altaTrabajador() {
     	 if (!validarTrabajador()) return;
+    	 try {
+    	        validarNss(txtNss.getText().trim());
+    	        validarTelefono(txtTelefonoT.getText().trim());
+    	        validarEmail(txtCorreoT.getText().trim());
         Trabajador t = new Trabajador(
             txtNss.getText().trim(),
             txtNombreT.getText().trim(),
@@ -546,9 +595,15 @@ public class Vista_Admin extends JDialog implements ActionListener {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al dar de alta el trabajador: " + ex.getMessage(),
                     "ERROR", JOptionPane.ERROR_MESSAGE);
+        } 
+        } catch (NssException e) {
+            e.visualizarMsg();
+        }catch (TelefonoException e) {
+		    e.visualizarMsg();
+		} catch (FormatoIncorrectoException e) {
+		    e.visualizarMsg();
         }
     }
-
     /**
      * Da de baja el trabajador cargado en el formulario.
      */
@@ -565,6 +620,9 @@ public class Vista_Admin extends JDialog implements ActionListener {
      */
     private void modificarTrabajador() {
     	 if (!validarTrabajador()) return;
+    	 try {  
+    		validarTelefono(txtTelefonoT.getText().trim());
+ 	        validarEmail(txtCorreoT.getText().trim());
         Trabajador t = new Trabajador(
             txtNss.getText().trim(),
             txtNombreT.getText().trim(),
@@ -576,6 +634,11 @@ public class Vista_Admin extends JDialog implements ActionListener {
         JOptionPane.showMessageDialog(this, "MODIFICACIÓN CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
         limpiarTrabajadores();
         tabbedPane.setSelectedComponent(panelInicio);
+    	 } catch (FormatoIncorrectoException e) {
+ 		    e.visualizarMsg();
+         }catch (TelefonoException e) {
+ 		    e.visualizarMsg();
+ 		}
     }
 
     /**
@@ -602,7 +665,8 @@ public class Vista_Admin extends JDialog implements ActionListener {
             txtNombreC.getText().trim().isEmpty() ||
             txtApellidoC.getText().trim().isEmpty() ||
             txtTelefonoC.getText().trim().isEmpty() ||
-            txtCorreoC.getText().trim().isEmpty()) {
+            txtCorreoC.getText().trim().isEmpty()||
+            txtDireccionC.getText().trim().isEmpty()){
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -625,7 +689,29 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
         return true;
     }
+    private void validarDni(String dni) throws DniException {
+        if (!dni.matches("\\d{8}[A-Z]")) {
+            throw new DniException("Formato de DNI incorrecto (12345678A)");
+        }
+    }
+    
+    public static void validarEmail(String email) throws FormatoIncorrectoException { 
+    	Pattern modelo = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"); 
+    	Matcher matcher = modelo.matcher(email); if (!matcher.matches()) { throw new FormatoIncorrectoException("Gmail con formato incorrecto"); } }
 
+    public static void validarNss(String nss) throws NssException {
+        if (!nss.matches("\\d{12}")) {
+            throw new NssException("El NSS debe tener exactamente 12 números");
+        }
+    }
+    
+    public static void validarTelefono(String telefono) throws TelefonoException {
+        
+        if (!telefono.matches("\\d{9}")) {
+            throw new TelefonoException("El teléfono debe tener exactamente 9 números");
+        }
+    }
+    
     // =========================================================================
     // CARGAR DATOS
     // =========================================================================
@@ -639,7 +725,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
      * @param tel    Teléfono del cliente
      * @param correo Correo del cliente
      */
-    public void cargarDatosCliente(String dni, String nombre, String ape, String tel, String correo) {
+    public void cargarDatosCliente(String dni, String nombre, String ape, String tel, String correo, String direccion) {
         tabbedPane.setSelectedComponent(panelClientes);
         txtDniC.setText(dni);
         txtDniC.setEditable(false);
@@ -647,6 +733,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtApellidoC.setText(ape);
         txtTelefonoC.setText(tel);
         txtCorreoC.setText(correo);
+        txtDireccionC.setText(direccion);
         btnAltaCliente.setEnabled(false);
         btnBajaCliente.setEnabled(true);
         btnModificarCliente.setEnabled(true);
