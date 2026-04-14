@@ -38,7 +38,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 	private Vista_Admin vAdmin;
 	private Vista_Trabajador vTrabajador;
 	private Vista_Cliente vCliente;
-	private Vista_Producto vProducto;
+	// private Vista_Producto vProducto;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -51,8 +51,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 	}
 
 	public Ventana_principal1() {
-		setTitle("Inicio: Okapi");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Home: Okapi");
 		setSize(500, 480);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -63,7 +62,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		root.setBorder(new EmptyBorder(40, 60, 30, 60));
 		setContentPane(root);
 
-		JLabel lblTitle = new JLabel("Panel de Gestión", SwingConstants.CENTER);
+		JLabel lblTitle = new JLabel("Management Panel", SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		lblTitle.setForeground(TEXT_PRIMARY);
 		lblTitle.setAlignmentX(CENTER_ALIGNMENT);
@@ -71,7 +70,8 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 		root.add(Box.createVerticalStrut(8));
 
-		JLabel lblSub = new JLabel("Selecciona una sección para continuar", SwingConstants.CENTER);
+
+		JLabel lblSub = new JLabel("Choose an option to continue", SwingConstants.CENTER);
 		lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblSub.setForeground(TEXT_SUBTLE);
 		lblSub.setAlignmentX(CENTER_ALIGNMENT);
@@ -85,89 +85,92 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		sep.setPreferredSize(new Dimension(200, 2));
 		sep.setAlignmentX(CENTER_ALIGNMENT);
 		root.add(sep);
-		
+
 		root.add(Box.createVerticalStrut(24));
 
-		String[][] buttons = { 
-				{ "📦", "Producto" }, 
-				{ "👷", "Trabajador" }, 
-				{ "🛡", "Administrador" },
-				{ "👤", "Cliente" } };
-		
+		String[][] buttons = {
+				{ "📦", "Product" },
+				{ "👷", "Employee" },
+				{ "🛡", "Admin" },
+				{ "👤", "Client" } };
+
 		btnProducto = createButton(buttons[0][0], buttons[0][1]);
 		btnTrabajador = createButton(buttons[1][0], buttons[1][1]);
-        btnAdmin      = createButton(buttons[2][0], buttons[2][1]);
-        btnCliente    = createButton(buttons[3][0], buttons[3][1]);	
-        
-        for(JButton btn : new JButton[] {btnProducto, btnTrabajador, btnAdmin, btnCliente}) {
-        	btn.setAlignmentX(CENTER_ALIGNMENT);
-        	btn.addActionListener(this);
-        	root.add(btn);
-        	root.add(Box.createVerticalStrut(14));
-        }
-        root.add(Box.createVerticalGlue());
-        
-        JLabel lblFooter = new JLabel("me da igual", SwingConstants.CENTER);
-        lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        lblFooter.setForeground(new Color(255, 192, 203));
-        lblFooter.setAlignmentX(CENTER_ALIGNMENT);
-        root.add(lblFooter);
-	}
-	
-	private JButton createButton(String emoji, String label) {
-        JButton btn = new JButton(emoji + "  " + label);
-        btn.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
-        btn.setForeground(TEXT_PRIMARY);
-        btn.setBackground(BTN_NORMAL);
-        btn.setFocusPainted(false);
-        btn.setBorder(new CompoundBorder(
-            new LineBorder(BTN_BORDER, 1, true),
-            new EmptyBorder(10, 24, 10, 24)
-        ));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setOpaque(true);
-        btn.setContentAreaFilled(true);
-        btn.setMaximumSize(new Dimension(240, 48));
-        btn.setPreferredSize(new Dimension(240, 48));
+		btnAdmin = createButton(buttons[2][0], buttons[2][1]);
+		btnCliente = createButton(buttons[3][0], buttons[3][1]);
 
-        btn.addMouseListener(new MouseAdapter() {
-            @Override public void mouseEntered(MouseEvent e) {
-                btn.setBackground(BTN_HOVER);
-                btn.setForeground(ACCENT);
-                btn.setBorder(new CompoundBorder(
-                    new LineBorder(ACCENT, 1, true),
-                    new EmptyBorder(10, 24, 10, 24)
-                ));
-            }
-            @Override public void mouseExited(MouseEvent e) {
-                btn.setBackground(BTN_NORMAL);
-                btn.setForeground(TEXT_PRIMARY);
-                btn.setBorder(new CompoundBorder(
-                    new LineBorder(BTN_BORDER, 1, true),
-                    new EmptyBorder(10, 24, 10, 24)
-                ));
-            }
-        });
+		for (JButton btn : new JButton[] { btnProducto, btnTrabajador, btnAdmin, btnCliente }) {
+			btn.setAlignmentX(CENTER_ALIGNMENT);
+			btn.addActionListener(this);
+			root.add(btn);
+			root.add(Box.createVerticalStrut(14));
+		}
+		root.add(Box.createVerticalGlue());
+
+		JLabel lblFooter = new JLabel("I dont care", SwingConstants.CENTER);
+		lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		lblFooter.setForeground(new Color(255, 192, 203));
+		lblFooter.setAlignmentX(CENTER_ALIGNMENT);
+		root.add(lblFooter);
+	}
+
+	private JButton createButton(String emoji, String label) {
+		JButton btn = new JButton(emoji + "  " + label);
+		btn.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
+		btn.setForeground(TEXT_PRIMARY);
+		btn.setBackground(BTN_NORMAL);
+		btn.setFocusPainted(false);
+		btn.setBorder(new CompoundBorder(
+				new LineBorder(BTN_BORDER, 1, true),
+				new EmptyBorder(10, 24, 10, 24)));
+		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btn.setOpaque(true);
+		btn.setContentAreaFilled(true);
+		btn.setMaximumSize(new Dimension(240, 48));
+		btn.setPreferredSize(new Dimension(240, 48));
+
+		btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn.setBackground(BTN_HOVER);
+				btn.setForeground(ACCENT);
+				btn.setBorder(new CompoundBorder(
+						new LineBorder(ACCENT, 1, true),
+						new EmptyBorder(10, 24, 10, 24)));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn.setBackground(BTN_NORMAL);
+				btn.setForeground(TEXT_PRIMARY);
+				btn.setBorder(new CompoundBorder(
+						new LineBorder(BTN_BORDER, 1, true),
+						new EmptyBorder(10, 24, 10, 24)));
+			}
+		});
 		return btn;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnProducto) {
-        	vProducto = new Vista_Producto();
-        	vProducto.setVisible(true);
-        }
-        if (e.getSource() == btnTrabajador) {
-        	vTrabajador = new Vista_Trabajador();
-        	vTrabajador.setVisible(true);
-        }
-        if (e.getSource() == btnAdmin) {
-        	vAdmin = new Vista_Admin();
-        	vAdmin.setVisible(true);
-        }
-        if (e.getSource() == btnCliente) {
-        	vCliente = new Vista_Cliente();
-        	vCliente.setVisible(true);
-        }
-    }
+			Vista_Producto.main(new String[3]); // Llamo al Main de la vista Producto.
+			dispose();
+		}
+		if (e.getSource() == btnTrabajador) {
+			vTrabajador = new Vista_Trabajador();
+			vTrabajador.setVisible(true);
+			this.setVisible(false);
+		}
+		if (e.getSource() == btnAdmin) {
+			vAdmin = new Vista_Admin();
+			vAdmin.setVisible(true);
+			this.setVisible(false);
+		}
+		if (e.getSource() == btnCliente) {
+			vCliente = new Vista_Cliente();
+			vCliente.setVisible(true);
+			this.setVisible(false);
+		}
+	}
 }

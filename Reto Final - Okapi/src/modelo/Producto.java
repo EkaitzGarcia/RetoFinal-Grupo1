@@ -1,3 +1,5 @@
+
+
 package modelo;
 
 public class Producto {
@@ -12,6 +14,10 @@ public class Producto {
 		this.precio = precio;
 		this.descuento = descuento;
 		this.nom_prod = nom_prod;
+	}
+	
+	public Producto() {
+		
 	}
 	public String getRef_producto() {
 		return ref_producto;
