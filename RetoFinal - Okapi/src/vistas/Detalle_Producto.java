@@ -15,14 +15,14 @@ public class Detalle_Producto extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     // Paleta de colores (igual que Ventana_principal1)
-    private static final Color BG_MAIN     = new Color(117, 85, 64);
-    private static final Color BTN_NORMAL  = new Color(126, 129, 115);
-    private static final Color BTN_HOVER   = new Color(255, 192, 203);
-    private static final Color BTN_BORDER  = new Color(255, 192, 203);
+    private static final Color BG_MAIN = new Color(117, 85, 64);
+    private static final Color BTN_NORMAL = new Color(126, 129, 115);
+    private static final Color BTN_HOVER = new Color(255, 192, 203);
+    private static final Color BTN_BORDER = new Color(255, 192, 203);
     private static final Color TEXT_PRIMARY = new Color(248, 250, 252);
-    private static final Color ACCENT      = new Color(248, 250, 252);
-    private static final Color FIELD_BG    = new Color(245, 240, 235);
-    private static final Color FIELD_FG    = new Color(60, 40, 20);
+    private static final Color ACCENT = new Color(248, 250, 252);
+    private static final Color FIELD_BG = new Color(245, 240, 235);
+    private static final Color FIELD_FG = new Color(60, 40, 20);
     private static final Color FIELD_DISABLED = new Color(200, 195, 190);
 
     private JButton btnGuardar, btnEliminar, btnCancelar;
