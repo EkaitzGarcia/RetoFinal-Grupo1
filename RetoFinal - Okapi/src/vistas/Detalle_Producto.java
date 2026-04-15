@@ -84,17 +84,23 @@ public class Detalle_Producto extends JDialog implements ActionListener {
         root.add(descText);
 
         // --- Botones ---
-        btnCancelar = createButton("Cancel");
+        btnCancelar = createButton("Cancel", BTN_NORMAL, BTN_HOVER, BTN_BORDER);
         btnCancelar.setBounds(20, 220, 110, 34);
         btnCancelar.addActionListener(this);
         root.add(btnCancelar);
 
-        btnEliminar = createButton("Delete");
+        btnEliminar = createButton("Delete",
+                new Color(185, 28, 28),    // rojo fondo
+                new Color(153, 20, 20),    // rojo hover
+                new Color(153, 20, 20));   // rojo borde
         btnEliminar.setBounds(160, 220, 110, 34);
         btnEliminar.addActionListener(this);
         root.add(btnEliminar);
 
-        btnGuardar = createButton("Save");
+        btnGuardar = createButton("Save",
+                new Color(46, 139, 87),    // verde fondo
+                new Color(34, 110, 65),    // verde hover
+                new Color(34, 110, 65));   // verde borde
         btnGuardar.setBounds(300, 220, 110, 34);
         btnGuardar.addActionListener(this);
         root.add(btnGuardar);
@@ -120,31 +126,31 @@ public class Detalle_Producto extends JDialog implements ActionListener {
         return field;
     }
 
-    private JButton createButton(String label) {
+    private JButton createButton(String label, Color bgColor, Color hoverColor, Color borderColor) {
         JButton btn = new JButton(label);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btn.setForeground(TEXT_PRIMARY);
-        btn.setBackground(BTN_NORMAL);
+        btn.setBackground(bgColor);
         btn.setFocusPainted(false);
         btn.setBorder(new CompoundBorder(
-                new LineBorder(BTN_BORDER, 1, true),
+                new LineBorder(borderColor, 1, true),
                 new EmptyBorder(4, 16, 4, 16)));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setOpaque(true);
         btn.setContentAreaFilled(true);
         btn.addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {
-                btn.setBackground(BTN_HOVER);
-                btn.setForeground(new Color(60, 40, 20));
+                btn.setBackground(hoverColor);
+                btn.setForeground(new Color(255, 255, 255));
                 btn.setBorder(new CompoundBorder(
-                        new LineBorder(ACCENT, 1, true),
+                        new LineBorder(hoverColor, 1, true),
                         new EmptyBorder(4, 16, 4, 16)));
             }
             @Override public void mouseExited(MouseEvent e) {
-                btn.setBackground(BTN_NORMAL);
+                btn.setBackground(bgColor);
                 btn.setForeground(TEXT_PRIMARY);
                 btn.setBorder(new CompoundBorder(
-                        new LineBorder(BTN_BORDER, 1, true),
+                        new LineBorder(borderColor, 1, true),
                         new EmptyBorder(4, 16, 4, 16)));
             }
         });
