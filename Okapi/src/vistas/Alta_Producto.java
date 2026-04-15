@@ -1,6 +1,5 @@
 package vistas;
 
-import principal.*;
 import modelo.*;
 import vistas.Vista_Producto;
 
