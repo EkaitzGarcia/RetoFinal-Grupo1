@@ -1,0 +1,8 @@
+# Carpeta de compilados
+bin/
+
+# Archivo de configuración de Eclipse
+.project
+
+# Configuración de VS Code
+.vscode/
