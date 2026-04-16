@@ -106,6 +106,3 @@ https://github.com/usuario/repositorio.git](https://github.com/EkaitzGarcia/Reto
 
 ---
 
-## 👨‍💻 Autoría
-
-Proyecto desarrollado por Grupo 1 como parte del módulo de Desarrollo de Aplicaciones Multiplataforma (DAM).
