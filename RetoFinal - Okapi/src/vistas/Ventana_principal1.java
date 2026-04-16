@@ -72,7 +72,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 	}
 
 	public Ventana_principal1() {
-		setTitle("Inicio: Okapi");
+		setTitle("Home: Okapi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 560);
 		setLocationRelativeTo(null);
@@ -84,7 +84,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		root.setBorder(new EmptyBorder(40, 60, 30, 60));
 		setContentPane(root);
 
-		JLabel lblTitle = new JLabel("Panel de Gestión", SwingConstants.CENTER);
+		JLabel lblTitle = new JLabel("Management panel", SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		lblTitle.setForeground(TEXT_PRIMARY);
 		lblTitle.setAlignmentX(CENTER_ALIGNMENT);
@@ -92,7 +92,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 		root.add(Box.createVerticalStrut(8));
 
-		JLabel lblSub = new JLabel("Selecciona una sección para continuar", SwingConstants.CENTER);
+		JLabel lblSub = new JLabel("Select a section to continue", SwingConstants.CENTER);
 		lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblSub.setForeground(TEXT_SUBTLE);
 		lblSub.setAlignmentX(CENTER_ALIGNMENT);
@@ -109,10 +109,10 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 		root.add(Box.createVerticalStrut(24));
 
-		btnProducto = createButton("📦", "Producto");
-		btnTrabajador = createButton("👷", "Trabajador");
-		btnAdmin = createButton("🛡", "Administrador");
-		btnCliente = createButton("👤", "Cliente");
+		btnProducto = createButton("📦", "Product");
+		btnTrabajador = createButton("👷", "Worker");
+		btnAdmin = createButton("🛡", "Administrator");
+		btnCliente = createButton("👤", "Client");
 
 		for (JButton btn : new JButton[] { btnProducto, btnTrabajador, btnAdmin, btnCliente }) {
 			btn.setAlignmentX(CENTER_ALIGNMENT);
@@ -129,7 +129,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 		root.add(sep2);
 		root.add(Box.createVerticalStrut(14));
 
-		btnExportarXML = createButtonXML("📄", "Exportar XML");
+		btnExportarXML = createButtonXML("📄", "Export XML");
 		btnExportarXML.setAlignmentX(CENTER_ALIGNMENT);
 		btnExportarXML.addActionListener(this);
 		root.add(btnExportarXML);
@@ -137,7 +137,7 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 		root.add(Box.createVerticalGlue());
 
-		JLabel lblFooter = new JLabel("me da igual", SwingConstants.CENTER);
+		JLabel lblFooter = new JLabel("I don't care", SwingConstants.CENTER);
 		lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblFooter.setForeground(new Color(255, 192, 203));
 		lblFooter.setAlignmentX(CENTER_ALIGNMENT);

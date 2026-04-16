@@ -178,11 +178,27 @@ SELECT AhorroCliente ('12345678A');
 
 
 
--- Procedimiento Ekaitz:
+-- Procedimiento Ekaitz con Cursor:
 DELIMITER //
 CREATE PROCEDURE VerProductos()
 BEGIN
-    SELECT REF, NOMBRE, PRECIO, DESCUENTO FROM PRODUCTO;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE v_ref VARCHAR(10);
+    DECLARE v_nombre VARCHAR(40);
+    DECLARE v_precio DECIMAL(10,2);
+    DECLARE v_descuento INT;
+    DECLARE cursor_productos CURSOR FOR
+        SELECT REF, NOMBRE, PRECIO, DESCUENTO FROM PRODUCTO;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN cursor_productos;
+    read_loop: LOOP
+        FETCH cursor_productos INTO v_ref, v_nombre, v_precio, v_descuento;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SELECT v_ref, v_nombre, v_precio, v_descuento;
+    END LOOP;
+    CLOSE cursor_productos;
 END //
 
 
