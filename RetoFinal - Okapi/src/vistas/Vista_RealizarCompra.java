@@ -76,7 +76,7 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
     public Vista_RealizarCompra(Cliente cliente) {
         this.clienteActual = cliente;
 
-        setTitle("OKAPI - Realizar Compra");
+        setTitle("OKAPI - Make a purchase");
         setBounds(100, 100, 820, 580);
         getContentPane().setLayout(new java.awt.BorderLayout());
         contentPanel.setBackground(COLOR_FONDO);

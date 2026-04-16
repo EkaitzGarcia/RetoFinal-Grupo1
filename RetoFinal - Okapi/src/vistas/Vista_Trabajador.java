@@ -109,14 +109,14 @@ public class Vista_Trabajador extends JDialog {
 	}
 
 	public Vista_Trabajador() {
-		setTitle("Panel de Trabajador - OKAPI");
+		setTitle("OKAPI - Worker Panel");
 		setSize(1080, 740);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		getContentPane().setBackground(BG_MAIN);
 		getContentPane().setLayout(new BorderLayout());
 
-		JLabel titulo = new JLabel("  Panel del Trabajador", SwingConstants.LEFT);
+		JLabel titulo = new JLabel("  Worker Panel", SwingConstants.LEFT);
 		titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		titulo.setForeground(Color.WHITE);
 		titulo.setBackground(BG_MAIN);
@@ -126,9 +126,9 @@ public class Vista_Trabajador extends JDialog {
 
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		tabs.addTab("Gestionar Compras", crearPanelGestionarCompras());
-		tabs.addTab("Alta de Compra",    crearPanelAltaCompra());
-		tabs.addTab("Ahorro Cliente",    crearPanelAhorro());
+		tabs.addTab("Manage Purchases", crearPanelGestionarCompras());
+		tabs.addTab("Make a Purchase",    crearPanelAltaCompra());
+		tabs.addTab("Client Savings",    crearPanelAhorro());
 		getContentPane().add(tabs, BorderLayout.CENTER);
 
 		cargarTodasLasCompras();
@@ -141,17 +141,17 @@ public class Vista_Trabajador extends JDialog {
 
 		JPanel panelBuscar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
 		panelBuscar.setBackground(ACCENT);
-		panelBuscar.setBorder(BorderFactory.createTitledBorder("Buscar compra por ID"));
+		panelBuscar.setBorder(BorderFactory.createTitledBorder("Search purchase by ID"));
 		txtBuscarIdCompra = new JTextField(8);
-		JButton btnBuscar   = crearBoton("Buscar", BTN_BLUE);
-		JButton btnVerTodas = crearBoton("Ver todas", new Color(100, 100, 100));
-		panelBuscar.add(new JLabel("ID compra:"));
+		JButton btnBuscar   = crearBoton("Search", BTN_BLUE);
+		JButton btnVerTodas = crearBoton("View all", new Color(100, 100, 100));
+		panelBuscar.add(new JLabel("Purchase ID:"));
 		panelBuscar.add(txtBuscarIdCompra);
 		panelBuscar.add(btnBuscar);
 		panelBuscar.add(btnVerTodas);
 		panel.add(panelBuscar, BorderLayout.NORTH);
 
-		String[] colsCompras = {"ID", "Fecha", "Total (EUR)", "Metodo Pago", "DNI", "Nombre", "Apellido"};
+		String[] colsCompras = {"ID", "Date", "Total (EUR)", "Payment Method", "DNI", "Name", "Surname"};
 		modeloTablaCompras = new DefaultTableModel(colsCompras, 0) {
 			public boolean isCellEditable(int r, int c) { return false; }
 		};
@@ -170,7 +170,7 @@ public class Vista_Trabajador extends JDialog {
 		tablaCompras.getTableHeader().setBackground(BG_MAIN);
 		tablaCompras.getTableHeader().setForeground(Color.WHITE);
 
-		String[] colsDetalle = {"Ref. Producto", "Cantidad", "Precio unit.", "Descuento %", "Subtotal"};
+		String[] colsDetalle = {"Product Ref.", "Quantity", "Unit Price", "Discount %", "Subtotal"};
 		modeloTablaDetalle = new DefaultTableModel(colsDetalle, 0) {
 			public boolean isCellEditable(int r, int c) { return false; }
 		};
@@ -182,9 +182,9 @@ public class Vista_Trabajador extends JDialog {
 		tablaDetalle.getTableHeader().setForeground(Color.WHITE);
 
 		JScrollPane scrollCompras = new JScrollPane(tablaCompras);
-		scrollCompras.setBorder(BorderFactory.createTitledBorder("Listado de compras"));
+		scrollCompras.setBorder(BorderFactory.createTitledBorder("List of purchases"));
 		JScrollPane scrollDetalle = new JScrollPane(tablaDetalle);
-		scrollDetalle.setBorder(BorderFactory.createTitledBorder("Productos de la compra seleccionada"));
+		scrollDetalle.setBorder(BorderFactory.createTitledBorder("Products of the selected purchase"));
 
 		JPanel panelTablas = new JPanel(new GridLayout(2, 1, 0, 6));
 		panelTablas.setBackground(BG_PANEL);
@@ -213,7 +213,7 @@ public class Vista_Trabajador extends JDialog {
 	private JPanel crearFormModificarCliente() {
 		JPanel p = new JPanel(new GridBagLayout());
 		p.setBackground(BG_PANEL);
-		p.setBorder(BorderFactory.createTitledBorder("Modificar Cliente seleccionado"));
+		p.setBorder(BorderFactory.createTitledBorder("Modify selected client"));
 		GridBagConstraints g = new GridBagConstraints();
 		g.insets = new Insets(3, 5, 3, 5);
 		g.fill = GridBagConstraints.HORIZONTAL;
@@ -224,9 +224,9 @@ public class Vista_Trabajador extends JDialog {
 		txtTelefonoCliente  = new JTextField(12);
 		txtCorreoCliente    = new JTextField(15);
 		txtDireccionCliente = new JTextField(15);
-		btnModificarCliente = crearBoton("Guardar cambios cliente", BTN_BLUE);
+		btnModificarCliente = crearBoton("Save changes", BTN_BLUE);
 
-		String[] labels = {"DNI:", "Nombre:", "Apellido:", "Telefono:", "Correo:", "Direccion:"};
+		String[] labels = {"DNI:", "Name:", "Surname:", "Phone:", "Email:", "Address:"};
 		JTextField[] fields = {txtDniCliente, txtNombreCliente, txtApellidoCliente,
 		                       txtTelefonoCliente, txtCorreoCliente, txtDireccionCliente};
 		for (int i = 0; i < labels.length; i++) {
@@ -241,7 +241,7 @@ public class Vista_Trabajador extends JDialog {
 	private JPanel crearFormModificarCompra() {
 		JPanel p = new JPanel(new GridBagLayout());
 		p.setBackground(BG_PANEL);
-		p.setBorder(BorderFactory.createTitledBorder("Modificar / Eliminar Compra seleccionada"));
+		p.setBorder(BorderFactory.createTitledBorder("Modify / Delete selected purchase"));
 		GridBagConstraints g = new GridBagConstraints();
 		g.insets = new Insets(3, 5, 3, 5);
 		g.fill = GridBagConstraints.HORIZONTAL;
@@ -252,10 +252,10 @@ public class Vista_Trabajador extends JDialog {
 		txtTotalCompra.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		txtTotalCompra.setForeground(TOTAL_COLOR);
 		cmbMetodoPago      = new JComboBox<>(new String[]{"TARJETA", "EFECTIVO"});
-		btnModificarCompra = crearBoton("Guardar cambios compra", BTN_BLUE);
-		btnEliminarCompra  = crearBoton("Eliminar compra", BTN_RED);
+		btnModificarCompra = crearBoton("Save changes", BTN_BLUE);
+		btnEliminarCompra  = crearBoton("Delete purchase", BTN_RED);
 
-		String[] labels = {"ID Compra:", "Fecha (yyyy-mm-dd):", "Total:", "Metodo pago:"};
+		String[] labels = {"Purchase ID:", "Date (yyyy-mm-dd):", "Total:", "Payment Method:"};
 		Component[] comps = {txtIdCompra, txtFechaCompra, txtTotalCompra, cmbMetodoPago};
 		for (int i = 0; i < labels.length; i++) {
 			g.gridx = 0; g.gridy = i; g.weightx = 0; p.add(etiqueta(labels[i]), g);
@@ -271,7 +271,7 @@ public class Vista_Trabajador extends JDialog {
 	private JPanel crearPanelAltaCompra() {
 		try { accesoBD.getTodosProductos(mapaProductos); }
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al cargar productos: " + ex.getMessage());
+			JOptionPane.showMessageDialog(this, "Error loading products: " + ex.getMessage());
 		}
 
 		JPanel panel = new JPanel(new BorderLayout(8, 8));
@@ -280,15 +280,15 @@ public class Vista_Trabajador extends JDialog {
 
 		JPanel panelCabecera = new JPanel(new GridBagLayout());
 		panelCabecera.setBackground(BG_PANEL);
-		panelCabecera.setBorder(BorderFactory.createTitledBorder("Datos de la compra"));
+		panelCabecera.setBorder(BorderFactory.createTitledBorder("Purchase data"));
 		GridBagConstraints g = new GridBagConstraints();
 		g.insets = new Insets(5, 8, 5, 8);
 		g.fill = GridBagConstraints.HORIZONTAL;
 		txtDniAltaCompra  = new JTextField(14);
 		cmbMetodoPagoAlta = new JComboBox<>(new String[]{"TARJETA", "EFECTIVO"});
-		g.gridx = 0; g.gridy = 0; g.weightx = 0; panelCabecera.add(etiqueta("DNI del cliente:"), g);
+		g.gridx = 0; g.gridy = 0; g.weightx = 0; panelCabecera.add(etiqueta("Client DNI:"), g);
 		g.gridx = 1; g.weightx = 1;               panelCabecera.add(txtDniAltaCompra, g);
-		g.gridx = 2; g.weightx = 0;               panelCabecera.add(etiqueta("Metodo de pago:"), g);
+		g.gridx = 2; g.weightx = 0;               panelCabecera.add(etiqueta("Payment Method:"), g);
 		g.gridx = 3; g.weightx = 1;               panelCabecera.add(cmbMetodoPagoAlta, g);
 		panel.add(panelCabecera, BorderLayout.NORTH);
 
@@ -296,15 +296,15 @@ public class Vista_Trabajador extends JDialog {
 		panelLineas.setLayout(new BoxLayout(panelLineas, BoxLayout.Y_AXIS));
 		panelLineas.setBackground(BG_PANEL);
 		JScrollPane scrollLineas = new JScrollPane(panelLineas);
-		scrollLineas.setBorder(BorderFactory.createTitledBorder("Productos (puede añadir varios)"));
+		scrollLineas.setBorder(BorderFactory.createTitledBorder("Products (you can add several)"));
 		scrollLineas.setPreferredSize(new Dimension(0, 230));
 		panel.add(scrollLineas, BorderLayout.CENTER);
 		agregarLineaProducto();
 
 		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 14, 8));
 		panelBotones.setBackground(BG_PANEL);
-		JButton btnAñadir = crearBoton("+ Añadir producto", BTN_BLUE);
-		btnDarAltaCompra  = crearBoton("Dar de alta compra", BTN_GREEN);
+		JButton btnAñadir = crearBoton("+ Add product", BTN_BLUE);
+		btnDarAltaCompra  = crearBoton("Make purchase", BTN_GREEN);
 		btnDarAltaCompra.setFont(btnDarAltaCompra.getFont().deriveFont(Font.BOLD, 14f));
 		panelBotones.add(btnAñadir);
 		panelBotones.add(btnDarAltaCompra);
@@ -349,7 +349,7 @@ public class Vista_Trabajador extends JDialog {
 		btnQuitar.setPreferredSize(new Dimension(32, 28));
 		btnQuitar.addActionListener(e -> {
 			if (listaComboProductos.size() <= 1) {
-				JOptionPane.showMessageDialog(this, "Debe haber al menos un producto."); return;
+				JOptionPane.showMessageDialog(this, "You must have at least one product."); return;
 			}
 			listaComboProductos.remove(combo);
 			listaSpinners.remove(spinner);
@@ -358,9 +358,9 @@ public class Vista_Trabajador extends JDialog {
 		});
 
 		fila.add(num);
-		fila.add(etiqueta("Producto:"));
+		fila.add(etiqueta("Product:"));
 		fila.add(combo);
-		fila.add(etiqueta("  Cantidad:"));
+		fila.add(etiqueta("  Quantity:"));
 		fila.add(spinner);
 		fila.add(lblPrecio);
 		fila.add(btnQuitar);
@@ -393,15 +393,15 @@ public class Vista_Trabajador extends JDialog {
 		g.fill = GridBagConstraints.HORIZONTAL;
 
 		txtDniAhorro       = new JTextField(12);
-		btnCalcularAhorro  = crearBoton("Calcular ahorro", BTN_GREEN);
+		btnCalcularAhorro  = crearBoton("Calculate savings", BTN_GREEN);
 		lblResultadoAhorro = new JLabel("---", SwingConstants.CENTER);
 		lblResultadoAhorro.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		lblResultadoAhorro.setForeground(TOTAL_COLOR);
 
-		g.gridy = 0; g.gridwidth = 1; g.weightx = 0; inner.add(etiqueta("DNI del cliente:"), g);
+		g.gridy = 0; g.gridwidth = 1; g.weightx = 0; inner.add(etiqueta("Client DNI:"), g);
 		g.gridx = 1; g.weightx = 1; inner.add(txtDniAhorro, g);
 		g.gridx = 0; g.gridy = 1; g.gridwidth = 2; inner.add(btnCalcularAhorro, g);
-		g.gridy = 2; inner.add(etiqueta("Ahorro total:"), g);
+		g.gridy = 2; inner.add(etiqueta("Total savings:"), g);
 		g.gridy = 3; inner.add(lblResultadoAhorro, g);
 
 		GridBagConstraints outer = new GridBagConstraints();
@@ -418,7 +418,7 @@ public class Vista_Trabajador extends JDialog {
 			for (Object[] fila : accesoBD.getTodasLasComprasConCliente())
 				modeloTablaCompras.addRow(fila);
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al cargar compras: " + ex.getMessage(),
+			JOptionPane.showMessageDialog(this, "Error loading purchases: " + ex.getMessage(),
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -432,11 +432,11 @@ public class Vista_Trabajador extends JDialog {
 			List<Object[]> filas = accesoBD.getCompraConClientePorId(id);
 			for (Object[] fila : filas) modeloTablaCompras.addRow(fila);
 			if (filas.isEmpty())
-				JOptionPane.showMessageDialog(this, "No se encontro ninguna compra con ID " + id);
+				JOptionPane.showMessageDialog(this, "No purchase found with ID " + id);
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "El ID debe ser un numero entero.");
+			JOptionPane.showMessageDialog(this, "The ID must be an integer.");
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage(),
+			JOptionPane.showMessageDialog(this, "Error searching: " + ex.getMessage(),
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -467,7 +467,7 @@ public class Vista_Trabajador extends JDialog {
 				txtDireccionCliente.setText(c.getDireccion());
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al cargar cliente: " + ex.getMessage());
+			JOptionPane.showMessageDialog(this, "Error loading client: " + ex.getMessage());
 		}
 
 		modeloTablaDetalle.setRowCount(0);
@@ -486,13 +486,13 @@ public class Vista_Trabajador extends JDialog {
 				});
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al cargar productos de la compra: " + ex.getMessage());
+			JOptionPane.showMessageDialog(this, "Error loading products: " + ex.getMessage());
 		}
 	}
 
 	private void modificarCliente() {
 		if (dniClienteSeleccionado == null) {
-			JOptionPane.showMessageDialog(this, "Selecciona primero una fila de la tabla."); return;
+			JOptionPane.showMessageDialog(this, "Select a row first."); return;
 		}
 		try {
 			accesoBD.actualizarCliente(new Cliente(
@@ -500,45 +500,45 @@ public class Vista_Trabajador extends JDialog {
 				txtApellidoCliente.getText().trim(), txtTelefonoCliente.getText().trim(),
 				txtCorreoCliente.getText().trim(), txtDireccionCliente.getText().trim()
 			));
-			JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente.");
+			JOptionPane.showMessageDialog(this, "Client updated successfully.");
 			cargarTodasLasCompras();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al modificar cliente: " + ex.getMessage(),
+			JOptionPane.showMessageDialog(this, "Error updating client: " + ex.getMessage(),
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	private void modificarCompra() {
 		if (idCompraSeleccionada < 0) {
-			JOptionPane.showMessageDialog(this, "Selecciona primero una fila de la tabla."); return;
+			JOptionPane.showMessageDialog(this, "Select a row first."); return;
 		}
 		try {
 			accesoBD.actualizarCompra(idCompraSeleccionada,
 				txtFechaCompra.getText().trim(), (String) cmbMetodoPago.getSelectedItem());
-			JOptionPane.showMessageDialog(this, "Compra actualizada correctamente.");
+			JOptionPane.showMessageDialog(this, "Purchase updated successfully.");
 			cargarTodasLasCompras();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al modificar compra: " + ex.getMessage(),
+			JOptionPane.showMessageDialog(this, "Error updating purchase: " + ex.getMessage(),
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	private void eliminarCompra() {
 		if (idCompraSeleccionada < 0) {
-			JOptionPane.showMessageDialog(this, "Selecciona primero una fila de la tabla."); return;
+			JOptionPane.showMessageDialog(this, "Select a row first."); return;
 		}
 		int ok = JOptionPane.showConfirmDialog(this,
-			"Seguro que quieres eliminar la compra " + idCompraSeleccionada + "?",
-			"Confirmar eliminacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			"Are you sure you want to delete purchase " + idCompraSeleccionada + "?",
+			"Confirm deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 		if (ok != JOptionPane.YES_OPTION) return;
 		try {
 			accesoBD.eliminarCompra(idCompraSeleccionada);
-			JOptionPane.showMessageDialog(this, "Compra eliminada correctamente.");
+			JOptionPane.showMessageDialog(this, "Purchase deleted successfully.");
 			idCompraSeleccionada = -1;
 			limpiarFormularios();
 			cargarTodasLasCompras();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al eliminar compra: " + ex.getMessage(),
+			JOptionPane.showMessageDialog(this, "Error deleting purchase: " + ex.getMessage(),
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -547,7 +547,7 @@ public class Vista_Trabajador extends JDialog {
 		String dni    = txtDniAltaCompra.getText().trim();
 		String metodo = (String) cmbMetodoPagoAlta.getSelectedItem();
 		if (dni.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Introduce el DNI del cliente."); return;
+			JOptionPane.showMessageDialog(this, "Introduce client DNI."); return;
 		}
 		List<Producto> productos  = new ArrayList<>();
 		List<Integer>  cantidades = new ArrayList<>();
@@ -555,7 +555,7 @@ public class Vista_Trabajador extends JDialog {
 			String ref = (String) listaComboProductos.get(i).getSelectedItem();
 			Producto prod = mapaProductos.get(ref);
 			if (prod == null) {
-				JOptionPane.showMessageDialog(this, "Producto no encontrado: " + ref); return;
+				JOptionPane.showMessageDialog(this, "Product not found: " + ref); return;
 			}
 			productos.add(prod);
 			cantidades.add((int) listaSpinners.get(i).getValue());
@@ -564,14 +564,14 @@ public class Vista_Trabajador extends JDialog {
 			accesoBD.insertarCompraMultiple(dni, metodo, productos, cantidades);
 			exportarXMLAutomatico();
 			JOptionPane.showMessageDialog(this,
-				"Compra creada con " + productos.size() + " producto(s).\nXML actualizado en: " + XML_AUTO_PATH);
+				"Purchase created with " + productos.size() + " product(s).\nXML updated at: " + XML_AUTO_PATH);
 			txtDniAltaCompra.setText("");
 			listaComboProductos.clear(); listaSpinners.clear();
 			panelLineas.removeAll(); panelLineas.revalidate(); panelLineas.repaint();
 			agregarLineaProducto();
 			cargarTodasLasCompras();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al dar de alta la compra: " + ex.getMessage(),
+			JOptionPane.showMessageDialog(this, "Error creating purchase: " + ex.getMessage(),
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -605,17 +605,17 @@ public class Vista_Trabajador extends JDialog {
 			new convertiro_exportador_de_xml().exportarTodo(
 				listaClientes, listaProds, trabajadores, filasCompras, XML_AUTO_PATH);
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Aviso: no se pudo actualizar el XML: " + ex.getMessage());
+			JOptionPane.showMessageDialog(this, "Warning: could not update XML: " + ex.getMessage());
 		}
 	}
 
 	private void calcularAhorro() {
 		String dni = txtDniAhorro.getText().trim();
-		if (dni.isEmpty()) { JOptionPane.showMessageDialog(this, "Introduce un DNI."); return; }
+		if (dni.isEmpty()) { JOptionPane.showMessageDialog(this, "Introduce client DNI."); return; }
 		try {
 			double ahorro = accesoBD.getAhorroCliente(dni);
 			if (ahorro < 0) {
-				lblResultadoAhorro.setText("Cliente no encontrado");
+				lblResultadoAhorro.setText("Client not found");
 				lblResultadoAhorro.setForeground(Color.RED);
 			} else {
 				lblResultadoAhorro.setText(String.format("%.2f EUR", ahorro));

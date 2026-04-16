@@ -57,7 +57,7 @@ public class Vista_Cliente extends JDialog implements ActionListener {
 
     public Vista_Cliente(Cliente cliente) {
         this.clienteActual = cliente;
-        setTitle("OKAPI - Panel de Cliente");
+        setTitle("OKAPI - Client Panel");
         setBounds(100, 100, 500, 370);
         setResizable(false);
         getContentPane().setLayout(new BorderLayout());
@@ -97,10 +97,10 @@ public class Vista_Cliente extends JDialog implements ActionListener {
         gradPanel.add(sep);
 
         // Tarjetas de navegacion
-        btnRealizarCompra = crearTarjeta("Realizar Compra", "/resources/CESTA_SI.png", 60, 105, 170, 155);
+        btnRealizarCompra = crearTarjeta("Make a Purchase", "/resources/CESTA_SI.png", 60, 105, 170, 155);
         gradPanel.add(btnRealizarCompra);
 
-        btnVerCompras = crearTarjetaTexto("Mis Compras", "Ver historial de pedidos", 270, 105, 170, 155);
+        btnVerCompras = crearTarjetaTexto("My Purchases", "View purchase history", 270, 105, 170, 155);
         gradPanel.add(btnVerCompras);
 
         // Boton salir estilo pill

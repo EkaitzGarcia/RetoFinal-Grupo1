@@ -219,14 +219,14 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 	public void accesoBD() {
 		AccesoBD accesoBD = new AccesoBD();
 		Map<String, Cliente> clientes = new TreeMap<>();
-		String dni = JOptionPane.showInputDialog(this, "Introduce tu DNI:");
+		String dni = JOptionPane.showInputDialog(this, "Introduce your DNI:");
 		try {
 			accesoBD.getClientePorDni(dni.toUpperCase(), clientes);
 			if (!clientes.isEmpty()) {
 				vCliente = new Vista_Cliente(clientes.get(dni.toUpperCase()));
 				vCliente.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(this, "DNI no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "DNI not found.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -235,9 +235,9 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 
 	private void exportarXML() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Guardar exportación XML");
+		chooser.setDialogTitle("Save XML export");
 		chooser.setSelectedFile(new java.io.File("okapi_export.xml"));
-		chooser.setFileFilter(new FileNameExtensionFilter("Ficheros XML (*.xml)", "xml"));
+		chooser.setFileFilter(new FileNameExtensionFilter("XML files (*.xml)", "xml"));
 
 		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
 			return;
@@ -278,11 +278,11 @@ public class Ventana_principal1 extends JFrame implements ActionListener {
 			new convertiro_exportador_de_xml().exportarTodo(clientes, productos, trabajadores, filasCompras, ruta);
 
 			reproducirSonido("/resources/exportar_xml.wav");
-			JOptionPane.showMessageDialog(this, "XML generado correctamente en:\n" + ruta, "Exportación completada",
+			JOptionPane.showMessageDialog(this, "XML generated correctly:\n" + ruta, "Export completed",
 					JOptionPane.INFORMATION_MESSAGE);
 
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al exportar:\n" + ex.getMessage(), "Error",
+			JOptionPane.showMessageDialog(this, "Error exporting:\n" + ex.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);
 			ex.printStackTrace();
 		}

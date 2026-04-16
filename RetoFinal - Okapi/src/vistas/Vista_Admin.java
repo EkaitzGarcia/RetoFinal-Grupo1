@@ -98,7 +98,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
 
     public Vista_Admin(Ventana_principal1 padre) {
         this.vPrincipal = padre;
-        setTitle("Panel Administrador");
+        setTitle("Administrator Panel");
         setBounds(100, 100, 700, 480);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setModal(true);
@@ -118,15 +118,15 @@ public class Vista_Admin extends JDialog implements ActionListener {
         panelInicio = new JPanel();
         panelInicio.setBackground(BG_MAIN);
         panelInicio.setLayout(null);
-        tabbedPane.addTab("Inicio", panelInicio);
+        tabbedPane.addTab("Home", panelInicio);
 
-        JLabel lblTitulo = new JLabel("¿Qué deseas gestionar?", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("What do you want to manage?", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblTitulo.setForeground(TEXT_PRIMARY);
         lblTitulo.setBounds(150, 50, 350, 30);
         panelInicio.add(lblTitulo);
 
-        btnVerClientes = new JButton("👤  Clientes");
+        btnVerClientes = new JButton("👤  Clients");
         btnVerClientes.setBounds(210, 110, 260, 50);
         btnVerClientes.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
         btnVerClientes.setForeground(TEXT_PRIMARY);
@@ -138,7 +138,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnVerClientes.addActionListener(this);
         panelInicio.add(btnVerClientes);
 
-        btnVerTrabajadores = new JButton("👷  Trabajadores");
+        btnVerTrabajadores = new JButton("👷  Workers");
         btnVerTrabajadores.setBounds(210, 180, 260, 50);
         btnVerTrabajadores.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
         btnVerTrabajadores.setForeground(TEXT_PRIMARY);
@@ -155,7 +155,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
 
-        JButton btnSalir = new JButton("  Salir");
+        JButton btnSalir = new JButton("  Exit");
         btnSalir.setBounds(24, 331, 160, 55);
         btnSalir.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
         btnSalir.setForeground(TEXT_PRIMARY);
@@ -178,7 +178,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         panelClientes = new JPanel();
         panelClientes.setBackground(BG_MAIN);
         panelClientes.setLayout(null);
-        tabbedPane.addTab("Clientes", panelClientes);
+        tabbedPane.addTab("Clients", panelClientes);
 
         JLabel lblDniC = new JLabel("DNI:");
         lblDniC.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -195,7 +195,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtDniC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtDniC);
 
-        JLabel lblNombreC = new JLabel("Nombre:");
+        JLabel lblNombreC = new JLabel("Name:");
         lblNombreC.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblNombreC.setForeground(TEXT_PRIMARY);
         lblNombreC.setBounds(50, 80, 140, 28);
@@ -210,7 +210,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtNombreC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtNombreC);
 
-        JLabel lblApellidoC = new JLabel("Apellido:");
+        JLabel lblApellidoC = new JLabel("Surname:");
         lblApellidoC.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblApellidoC.setForeground(TEXT_PRIMARY);
         lblApellidoC.setBounds(50, 120, 140, 28);
@@ -225,7 +225,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtApellidoC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtApellidoC);
 
-        JLabel lblTelefonoC = new JLabel("Teléfono:");
+        JLabel lblTelefonoC = new JLabel("Phone:");
         lblTelefonoC.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblTelefonoC.setForeground(TEXT_PRIMARY);
         lblTelefonoC.setBounds(50, 160, 140, 28);
@@ -240,7 +240,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtTelefonoC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtTelefonoC);
 
-        JLabel lblCorreoC = new JLabel("Correo:");
+        JLabel lblCorreoC = new JLabel("Email:");
         lblCorreoC.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblCorreoC.setForeground(TEXT_PRIMARY);
         lblCorreoC.setBounds(50, 200, 140, 28);
@@ -255,7 +255,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtCorreoC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtCorreoC);
 
-        JLabel lblDireccionC = new JLabel("Dirección:");
+        JLabel lblDireccionC = new JLabel("Address:");
         lblDireccionC.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblDireccionC.setForeground(TEXT_PRIMARY);
         lblDireccionC.setBounds(50, 240, 140, 28);
@@ -270,7 +270,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtDireccionC.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelClientes.add(txtDireccionC);
 
-        btnAltaCliente = new JButton("Alta");
+        btnAltaCliente = new JButton("Add");
         btnAltaCliente.setBounds(40, 290, 130, 35);
         btnAltaCliente.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnAltaCliente.setForeground(TEXT_PRIMARY);
@@ -282,7 +282,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnAltaCliente.addActionListener(this);
         panelClientes.add(btnAltaCliente);
 
-        btnBajaCliente = new JButton("Baja");
+        btnBajaCliente = new JButton("Delete");
         btnBajaCliente.setBounds(185, 290, 130, 35);
         btnBajaCliente.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnBajaCliente.setForeground(TEXT_PRIMARY);
@@ -294,7 +294,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnBajaCliente.addActionListener(this);
         panelClientes.add(btnBajaCliente);
 
-        btnModificarCliente = new JButton("Modificar");
+        btnModificarCliente = new JButton("Modify");
         btnModificarCliente.setBounds(330, 290, 130, 35);
         btnModificarCliente.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnModificarCliente.setForeground(TEXT_PRIMARY);
@@ -306,7 +306,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarCliente.addActionListener(this);
         panelClientes.add(btnModificarCliente);
 
-        btnLimpiarCliente = new JButton("Limpiar");
+        btnLimpiarCliente = new JButton("Clear");
         btnLimpiarCliente.setBounds(475, 290, 130, 35);
         btnLimpiarCliente.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnLimpiarCliente.setForeground(TEXT_PRIMARY);
@@ -327,7 +327,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         panelTrabajadores = new JPanel();
         panelTrabajadores.setBackground(BG_MAIN);
         panelTrabajadores.setLayout(null);
-        tabbedPane.addTab("Trabajadores", panelTrabajadores);
+        tabbedPane.addTab("Workers", panelTrabajadores);
 
         JLabel lblNssT = new JLabel("NSS:");
         lblNssT.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -344,7 +344,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtNss.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelTrabajadores.add(txtNss);
 
-        JLabel lblNombreT = new JLabel("Nombre:");
+        JLabel lblNombreT = new JLabel("Name:");
         lblNombreT.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblNombreT.setForeground(TEXT_PRIMARY);
         lblNombreT.setBounds(50, 80, 140, 28);
@@ -359,7 +359,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtNombreT.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelTrabajadores.add(txtNombreT);
 
-        JLabel lblApellidoT = new JLabel("Apellido:");
+        JLabel lblApellidoT = new JLabel("Surname:");
         lblApellidoT.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblApellidoT.setForeground(TEXT_PRIMARY);
         lblApellidoT.setBounds(50, 120, 140, 28);
@@ -374,7 +374,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtApellidoT.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelTrabajadores.add(txtApellidoT);
 
-        JLabel lblTelefonoT = new JLabel("Teléfono:");
+        JLabel lblTelefonoT = new JLabel("Phone:");
         lblTelefonoT.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblTelefonoT.setForeground(TEXT_PRIMARY);
         lblTelefonoT.setBounds(50, 160, 140, 28);
@@ -389,7 +389,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtTelefonoT.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelTrabajadores.add(txtTelefonoT);
 
-        JLabel lblCorreoT = new JLabel("Correo:");
+        JLabel lblCorreoT = new JLabel("Email:");
         lblCorreoT.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblCorreoT.setForeground(TEXT_PRIMARY);
         lblCorreoT.setBounds(50, 200, 140, 28);
@@ -404,7 +404,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         txtCorreoT.setBorder(new CompoundBorder(new LineBorder(FIELD_BORDER, 1, true), new EmptyBorder(2, 8, 2, 8)));
         panelTrabajadores.add(txtCorreoT);
 
-        btnAltaTrab = new JButton("Alta");
+        btnAltaTrab = new JButton("Add");
         btnAltaTrab.setBounds(40, 290, 130, 35);
         btnAltaTrab.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnAltaTrab.setForeground(TEXT_PRIMARY);
@@ -416,7 +416,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnAltaTrab.addActionListener(this);
         panelTrabajadores.add(btnAltaTrab);
 
-        btnBajaTrab = new JButton("Baja");
+        btnBajaTrab = new JButton("Delete");
         btnBajaTrab.setBounds(185, 290, 130, 35);
         btnBajaTrab.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnBajaTrab.setForeground(TEXT_PRIMARY);
@@ -428,7 +428,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnBajaTrab.addActionListener(this);
         panelTrabajadores.add(btnBajaTrab);
 
-        btnModificarTrab = new JButton("Modificar");
+        btnModificarTrab = new JButton("Modify");
         btnModificarTrab.setBounds(330, 290, 130, 35);
         btnModificarTrab.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnModificarTrab.setForeground(TEXT_PRIMARY);
@@ -440,7 +440,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarTrab.addActionListener(this);
         panelTrabajadores.add(btnModificarTrab);
 
-        btnLimpiarTrab = new JButton("Limpiar");
+        btnLimpiarTrab = new JButton("Clear");
         btnLimpiarTrab.setBounds(475, 290, 130, 35);
         btnLimpiarTrab.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnLimpiarTrab.setForeground(TEXT_PRIMARY);
@@ -497,7 +497,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
             c.setDireccion(txtDireccionC.getText().trim());
 
             Principal.altaCliente(c);
-            JOptionPane.showMessageDialog(this, "ALTA CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "CORRECT!!", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
             limpiarClientes();
             tabbedPane.setSelectedComponent(panelInicio);
 
@@ -521,12 +521,12 @@ public class Vista_Admin extends JDialog implements ActionListener {
         c.setDni(txtDniC.getText().trim());
         try {
             Principal.bajaCliente(c);
-            JOptionPane.showMessageDialog(this, "BAJA CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "CORRECT!!", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
             limpiarClientes();
             tabbedPane.setSelectedComponent(panelInicio);
         } catch (Exception ex) {
             reproducirSonido("/resources/excepcion.wav");
-            JOptionPane.showMessageDialog(this, "Error al dar de baja el cliente: " + ex.getMessage(),
+            JOptionPane.showMessageDialog(this, "Error trying to delete: " + ex.getMessage(),
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -544,7 +544,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
             c.setCorreo(txtCorreoC.getText().trim());
             c.setDireccion(txtDireccionC.getText().trim());
             Principal.modificarCliente(c);
-            JOptionPane.showMessageDialog(this, "MODIFICACIÓN CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "CORRECT!!", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
             limpiarClientes();
             tabbedPane.setSelectedComponent(panelInicio);
         } catch (FormatoIncorrectoException e) {
@@ -584,14 +584,14 @@ public class Vista_Admin extends JDialog implements ActionListener {
             );
             try {
                 String mensaje = Principal.altaTrabajador(t);
-                JOptionPane.showMessageDialog(this, mensaje, "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
-                if (!mensaje.contains("YA EXISTE")) {
+                JOptionPane.showMessageDialog(this, mensaje, "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+                if (!mensaje.contains("Alredy Exists")) {
                     limpiarTrabajadores();
                     tabbedPane.setSelectedComponent(panelInicio);
                 }
             } catch (Exception ex) {
                 reproducirSonido("/resources/excepcion.wav");
-                JOptionPane.showMessageDialog(this, "Error al dar de alta el trabajador: " + ex.getMessage(),
+                JOptionPane.showMessageDialog(this, "Error trying to add worker: " + ex.getMessage(),
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NssException e) {
@@ -609,7 +609,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
     private void bajaTrabajador() {
         Trabajador t = new Trabajador(txtNss.getText().trim(), "", "", "", "");
         Principal.bajaTrabajador(t);
-        JOptionPane.showMessageDialog(this, "BAJA CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "CORRECT!!", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
         limpiarTrabajadores();
         tabbedPane.setSelectedComponent(panelInicio);
     }
@@ -627,7 +627,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
                 txtCorreoT.getText().trim()
             );
             Principal.modificarTrabajador(t);
-            JOptionPane.showMessageDialog(this, "MODIFICACIÓN CORRECTA!!", "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "CORRECT!!", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
             limpiarTrabajadores();
             tabbedPane.setSelectedComponent(panelInicio);
         } catch (FormatoIncorrectoException e) {
@@ -659,7 +659,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
             txtCorreoC.getText().trim().isEmpty() ||
             txtDireccionC.getText().trim().isEmpty()) {
             reproducirSonido("/resources/excepcion.wav");
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "All fields are required.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -672,7 +672,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
             txtTelefonoT.getText().trim().isEmpty() ||
             txtCorreoT.getText().trim().isEmpty()) {
             reproducirSonido("/resources/excepcion.wav");
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "All fields are required.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -680,25 +680,25 @@ public class Vista_Admin extends JDialog implements ActionListener {
 
     private void validarDni(String dni) throws DniException {
         if (!dni.matches("\\d{8}[A-Z]")) {
-            throw new DniException("Formato de DNI incorrecto (12345678A)");
+            throw new DniException("Incorrect DNI format (12345678A)");
         }
     }
 
     public static void validarEmail(String email) throws FormatoIncorrectoException {
         Pattern modelo = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
         Matcher matcher = modelo.matcher(email);
-        if (!matcher.matches()) { throw new FormatoIncorrectoException("Gmail con formato incorrecto"); }
+        if (!matcher.matches()) { throw new FormatoIncorrectoException("Incorrect Gmail format"); }
     }
 
     public static void validarNss(String nss) throws NssException {
         if (!nss.matches("\\d{12}")) {
-            throw new NssException("El NSS debe tener exactamente 12 números");
+            throw new NssException("NSS must have exactly 12 numbers");
         }
     }
 
     public static void validarTelefono(String telefono) throws TelefonoException {
         if (!telefono.matches("\\d{9}")) {
-            throw new TelefonoException("El teléfono debe tener exactamente 9 números");
+            throw new TelefonoException("The phone must have exactly 9 numbers");
         }
     }
 

@@ -28,7 +28,7 @@ public class MostrarTrabajadores extends JDialog {
     public MostrarTrabajadores(Vista_Admin padre, boolean modal) {
         super(padre);
         this.setModal(modal);
-        setTitle("Lista de Trabajadores");
+        setTitle("Workers List:");
         setBounds(100, 100, 600, 400);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
@@ -36,7 +36,7 @@ public class MostrarTrabajadores extends JDialog {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(new BorderLayout());
 
-        String[] columnNames = {"NSS", "Nombre", "Apellido", "Teléfono", "Correo"};
+        String[] columnNames = {"NSS", "Name", "Surname", "Phone", "Email"};
         model = new DefaultTableModel(columnNames, 0) {
             private static final long serialVersionUID = 1L;
             @Override

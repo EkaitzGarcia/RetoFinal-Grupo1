@@ -54,7 +54,7 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
 
     public Vista_MisCompras(Cliente cliente) {
         this.clienteActual = cliente;
-        setTitle("OKAPI - Mis Compras");
+        setTitle("OKAPI - My purchases");
         setBounds(100, 100, 780, 560);
         setResizable(false);
         getContentPane().setLayout(new java.awt.BorderLayout());

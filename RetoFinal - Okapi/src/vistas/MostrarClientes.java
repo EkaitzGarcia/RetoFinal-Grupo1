@@ -28,7 +28,7 @@ public class MostrarClientes extends JDialog {
     public MostrarClientes(Vista_Admin padre, boolean modal) {
         super(padre);
         this.setModal(modal);
-        setTitle("Lista de Clientes");
+        setTitle("Client List:");
         setBounds(100, 100, 600, 400);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
@@ -36,7 +36,7 @@ public class MostrarClientes extends JDialog {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(new BorderLayout());
 
-        String[] columnNames = {"DNI", "Nombre", "Apellido", "Teléfono", "Correo", "Direccion"};
+        String[] columnNames = {"DNI", "Name", "Surname", "Phone", "Email", "Address"};
         model = new DefaultTableModel(columnNames, 0) {
             private static final long serialVersionUID = 1L;
             @Override
