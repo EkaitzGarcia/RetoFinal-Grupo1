@@ -176,8 +176,8 @@ public class Alta_Producto extends JDialog implements ActionListener {
             if (refText.getText().trim().isEmpty() || nomText.getText().trim().isEmpty()
                     || preText.getText().trim().isEmpty() || descText.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this,
-                        "Todos los campos son obligatorios.",
-                        "Error de validación",
+                        "All the fields are required.",
+                        "Validation error",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -187,8 +187,8 @@ public class Alta_Producto extends JDialog implements ActionListener {
                 precio = Float.parseFloat(preText.getText().trim().replace(",", "."));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this,
-                        "El precio debe ser un número válido (ej: 29.99 o 29,99).",
-                        "Error de validación",
+                        "The price must be a valid number (ex: 29.99 or 29,99).",
+                        "Validation error",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -198,8 +198,8 @@ public class Alta_Producto extends JDialog implements ActionListener {
                 descuento = Integer.parseInt(descText.getText().trim());
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this,
-                        "El descuento debe ser un número entero (ej: 10).",
-                        "Error de validación",
+                        "The discount must be an integer (ex: 10).",
+                        "Validation error",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -214,14 +214,14 @@ public class Alta_Producto extends JDialog implements ActionListener {
             try {
                 acceso.insertarProducto(producto);
                 JOptionPane.showMessageDialog(this,
-                        "Producto añadido correctamente.",
-                        "Éxito",
+                        "Product added successfully.",
+                        "Success",
                         JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Error al insertar el producto:\n" + ex.getMessage(),
-                        "Error de base de datos",
+                        "Error inserting product:\n" + ex.getMessage(),
+                        "Database error",
                         JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
