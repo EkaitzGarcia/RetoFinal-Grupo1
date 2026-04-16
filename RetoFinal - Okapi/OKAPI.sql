@@ -90,56 +90,26 @@ INSERT INTO ESTA VALUES
 DELIMITER //
 CREATE PROCEDURE MediaCompraMes(P_MES INT, P_AÑO INT)
 BEGIN
-    DECLARE V_MEDIA DECIMAL(10,2);
+	DECLARE V_MEDIA DECIMAL(10,2);
     DECLARE V_NUMCOMPRAS INT;
-    
-    -- Declaración de variables para el manejador de excepciones
-    DECLARE V_CODIGO_ERROR INT;
-    DECLARE V_MENSAJE_ERROR TEXT;
-    DECLARE V_SQLSTATE CHAR(5);
-    
-    -- Manejador de excepciones genérico (captura cualquier error SQL)
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-    BEGIN
-        GET DIAGNOSTICS CONDITION 1
-            V_CODIGO_ERROR = MYSQL_ERRNO,
-            V_SQLSTATE     = RETURNED_SQLSTATE,
-            V_MENSAJE_ERROR = MESSAGE_TEXT;
-        SELECT CONCAT(
-            'Error ', V_CODIGO_ERROR,
-            ' (SQLSTATE: ', V_SQLSTATE, '): ',
-            V_MENSAJE_ERROR
-        ) AS MENSAJE;
-    END;
+    DECLARE SIN_DATOS BOOL DEFAULT 0;
 
-    -- Manejador para cuando no se encuentran filas (código 1329 / 02000)
-    DECLARE CONTINUE HANDLER FOR NOT FOUND
-    BEGIN
-        SELECT CONCAT(
-            'No hay compras registradas en ', P_MES, '/', P_AÑO
-        ) AS MENSAJE;
-    END;
-
+    -- EXCEPCIÓN REAL: NO HAY FILAS EN SELECT INTO
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '02000'
+    SET SIN_DATOS = 1;
+    
     IF P_MES < 1 OR P_MES > 12 THEN
-        SELECT 'El mes tiene que ser entre 1 y 12' AS MENSAJE;
-    ELSE
-        SELECT COUNT(*), AVG(TOTAL)
-        INTO V_NUMCOMPRAS, V_MEDIA
-        FROM COMPRA
-        WHERE MONTH(FECHA) = P_MES AND YEAR(FECHA) = P_AÑO;
-
-        IF V_NUMCOMPRAS = 0 THEN
-            SELECT CONCAT(
-                'No hay compras registradas en ', P_MES, '/', P_AÑO
-            ) AS MENSAJE;
-        ELSE
-            SELECT CONCAT(
-                'En ', P_MES, '/', P_AÑO,
-                ' se realizaron ', V_NUMCOMPRAS,
-                ' compras con una media de ', V_MEDIA, '€'
-            ) AS MENSAJE;
+		SELECT 'El mes tiene que ser entre 1 y 12' AS MENSAJE;
+        SET P_MES = MONTH(CURDATE()); 
+	ELSE
+		SELECT COUNT(*), AVG(TOTAL) INTO V_NUMCOMPRAS, V_MEDIA FROM COMPRA WHERE MONTH(FECHA) = P_MES AND YEAR(FECHA) = P_AÑO;
+        
+	IF SIN_DATOS = 1 OR V_NUMCOMPRAS = 0 THEN
+		SELECT CONCAT('No hay compras registradas en ', P_MES, '/', P_AÑO) AS MENSAJE;
+	ELSE
+		SELECT CONCAT('En', P_MES, '/', P_AÑO, 'se realizaron ', V_NUMCOMPRAS, ' compras en una media de ', V_MEDIA, '€') AS MENSAJE;
         END IF;
-    END IF;
+	END IF;
 END//
 DELIMITER ;
 
@@ -175,32 +145,29 @@ DELIMITER ;
 
 SELECT AhorroCliente ('12345678A');
 
-
-
-
--- Procedimiento Ekaitz con Cursor:
+-- Procedimiento Ekaitz:
 DELIMITER //
 CREATE PROCEDURE VerProductos()
 BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE v_ref VARCHAR(10);
-    DECLARE v_nombre VARCHAR(40);
-    DECLARE v_precio DECIMAL(10,2);
-    DECLARE v_descuento INT;
-    DECLARE cursor_productos CURSOR FOR
-        SELECT REF, NOMBRE, PRECIO, DESCUENTO FROM PRODUCTO;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    OPEN cursor_productos;
-    read_loop: LOOP
-        FETCH cursor_productos INTO v_ref, v_nombre, v_precio, v_descuento;
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
-        SELECT v_ref, v_nombre, v_precio, v_descuento;
-    END LOOP;
-    CLOSE cursor_productos;
+	DECLARE P_REF VARCHAR(10);
+    DECLARE P_NOMBRE VARCHAR(30);
+    DECLARE P_PRECIO DECIMAL(10,2);
+    DECLARE P_DESCUENTO INT;
+    
+    DECLARE FIN BOOLEAN DEFAULT 0;
+    DECLARE C CURSOR FOR SELECT REF, NOMBRE, PRECIO, DESCUENTO FROM PRODUCTO;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET FIN = 1;
+    
+    OPEN C;
+		FETCH C INTO P_REF, P_NOMBRE, P_PRECIO, P_DESCUENTO;
+        WHILE FIN = 0 DO
+        SELECT P_REF AS REF, P_NOMBRE AS NOMBRE, P_PRECIO AS PRECIO, P_DESCUENTO AS DESCUENTO;
+            FETCH C INTO P_REF, P_NOMBRE, P_PRECIO, P_DESCUENTO;
+		END WHILE;
+	CLOSE C;
 END //
-
+DELIMITER ;
+CALL VerProductos();
 
 -- Funcion Ekaitz:
 DELIMITER //
@@ -209,20 +176,35 @@ CREATE FUNCTION PRODUCTO_MAS_VENDIDO()
 RETURNS VARCHAR(30)
 DETERMINISTIC
 BEGIN
-    DECLARE nombre_producto VARCHAR(30);
+    DECLARE NOMBRE_PRODUCTO VARCHAR(30);
+    DECLARE SIN_DATOS BOOL DEFAULT 0;
 
-    SELECT P.NOMBRE INTO nombre_producto
+    -- EXCEPCIÓN REAL: NO HAY FILAS EN SELECT INTO
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '02000'
+    SET SIN_DATOS = 1;
+
+    SELECT P.NOMBRE
+    INTO NOMBRE_PRODUCTO
     FROM PRODUCTO P
     JOIN ESTA E ON P.REF = E.REF
     GROUP BY P.REF, P.NOMBRE
     ORDER BY SUM(E.CANTIDAD) DESC
     LIMIT 1;
 
-    RETURN nombre_producto;
+    -- CONTROL REAL DE EXCEPCIÓN
+    IF SIN_DATOS = 1 OR NOMBRE_PRODUCTO IS NULL THEN
+        RETURN 'SIN PRODUCTOS VENDIDOS';
+    END IF;
+
+    RETURN NOMBRE_PRODUCTO;
 
 END //
--- Procedimiento Irati:
 
+DELIMITER ;
+SELECT PRODUCTO_MAS_VENDIDO();
+
+-- Procedimiento Irati:
+DELIMITER // 
 Create procedure COMPRA_COMPLETA (IN id_compra INT, IN fecha_compra DATE, IN metodo ENUM('EFECTIVO', 'TARJETA'), IN dni_cliente CHAR(9), IN nss_trabajador CHAR(12))
 BEGIN
     DECLARE duplicado BOOL DEFAULT 0;
@@ -250,10 +232,6 @@ DELIMITER ;
 CALL COMPRA_COMPLETA(6, '2026-03-18', 'TARJETA', '23456789B', '222222222222');
 
 
-
-
-
-
 -- Función Irati:
 
 DELIMITER //
@@ -262,7 +240,7 @@ BEGIN
 	DECLARE cliente_total DECIMAL(10,2) default 0;
     
     Select  SUM(TOTAL) INTO cliente_total FROM COMPRA WHERE DNI=DNI_CLIENTE;
-      IF cliente_total < 100 THEN
+    IF cliente_total < 100 THEN
         RETURN 'BRONCE';
     ELSEIF cliente_total BETWEEN 100 AND 300 THEN
         RETURN 'PLATA';
@@ -271,9 +249,9 @@ BEGIN
     END IF;    
 END //
 DELIMITER ;
+SELECT NIVEL_CLIENTE('12345678A');
 
-
-– Procedimiento Mikel:
+-- PROCEDIMIENTO MIKEL
 DELIMITER //
 
 CREATE PROCEDURE ALTATRABAJADOR_VALIDADO (
@@ -356,6 +334,8 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+SELECT TOTALFINALCOMPRAAVANZADO(2);
 
 -- INSERTAMOS UNA COMPRA DE PRUEBA
 INSERT INTO COMPRA (ID, FECHA, TOTAL, METODO_PAGO, DNI, NSS)

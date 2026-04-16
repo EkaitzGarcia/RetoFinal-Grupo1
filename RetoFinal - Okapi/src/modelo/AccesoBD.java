@@ -478,12 +478,14 @@ public class AccesoBD {
 			try (CallableStatement stmt = con.prepareCall(VERPRODUCTO)) {
 				System.out.println("[DEBUG] Ejecutando CALL VerProductos()...");
 
+				int indice =0;
 				boolean tieneResultSet = stmt.execute();
+				
 				System.out.println("[DEBUG] tieneResultSet: " + tieneResultSet);
 
-				if (tieneResultSet) {
+				while (tieneResultSet) {
 					try (ResultSet rs = stmt.getResultSet()) {
-						int indice = 0;
+						
 						while (rs.next()) {
 							Producto producto = new Producto();
 							producto.setRef_producto(rs.getString("REF"));
@@ -493,11 +495,11 @@ public class AccesoBD {
 							productos.put(indice++, producto);
 							System.out.println("[DEBUG] Producto leído: " + producto.toString());
 						}
-						System.out.println("[DEBUG] Total productos cargados: " + productos.size());
-					}
-				} else {
-					System.out.println("[DEBUG] El CALL no devolvió ningún ResultSet.");
+						
+					}			
+					tieneResultSet = stmt.getMoreResults();
 				}
+				System.out.println("[DEBUG] Total productos cargados: " + productos.size());
 			}
 		}
 	}
