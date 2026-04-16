@@ -3,3 +3,6 @@ bin/
 
 # Configuración de VS Code
 .vscode/
+
+#Carpeta de metadatos
+.metadata/
