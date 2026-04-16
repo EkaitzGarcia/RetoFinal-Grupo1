@@ -19,6 +19,19 @@ import java.awt.event.*;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Diálogo que muestra el historial de compras de un cliente con dos tablas:
+ * <ul>
+ *   <li><b>Orders</b> (izquierda) – lista de compras con ID, fecha, total y método de pago.
+ *       La columna {@code Payment} es editable directamente para cambiar el método.</li>
+ *   <li><b>Products</b> (derecha) – productos de la compra seleccionada con cantidades y subtotales.</li>
+ * </ul>
+ * <p>El botón <b>Save changes</b> persiste los cambios de método de pago en la BD.</p>
+ *
+ * @see Vista_Cliente
+ * @see modelo.AccesoBD#getComprasPorCliente(String, java.util.Map)
+ * @see modelo.AccesoBD#actualizarMetodoPago(int, String)
+ */
 public class Vista_MisCompras extends JDialog implements ActionListener {
 
     private JPanel contentPanel = new JPanel();
@@ -41,6 +54,12 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
     private static final Color COLOR_BOTON_PPAL    = new Color(117, 85, 64);
     private static final Color COLOR_BOTON_CANCEL  = new Color(180, 80, 60);
 
+    /**
+     * Reproduce un efecto de sonido (.wav) desde los recursos del classpath.
+     * Falla silenciosamente si el recurso no existe o se produce cualquier error.
+     *
+     * @param recurso Ruta del recurso relativa al classpath.
+     */
     private static void reproducirSonido(String recurso) {
         try {
             URL url = Vista_MisCompras.class.getResource(recurso);
@@ -52,6 +71,11 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
         } catch (Exception ex) { }
     }
 
+    /**
+     * Construye el diálogo de historial de compras para el cliente dado.
+     *
+     * @param cliente Objeto {@link modelo.Cliente} cuyas compras se mostrarán.
+     */
     public Vista_MisCompras(Cliente cliente) {
         this.clienteActual = cliente;
         setTitle("OKAPI - My purchases");
@@ -156,6 +180,17 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
         cargarCompras();
     }
 
+    /**
+     * Crea un botón estilizado con colores definidos por parámetro.
+     *
+     * @param texto  Texto del botón.
+     * @param x      Coordenada X.
+     * @param y      Coordenada Y.
+     * @param w      Ancho.
+     * @param h      Alto.
+     * @param fondo  Color de fondo.
+     * @return {@link JButton} configurado.
+     */
     private JButton crearBoton(String texto, int x, int y, int w, int h, Color fondo) {
         JButton btn = new JButton(texto);
         btn.setBounds(x, y, w, h);
@@ -169,6 +204,11 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Aplica el estilo visual común (fuente, colores, cabecera) a una tabla.
+     *
+     * @param tabla Tabla a estilizar.
+     */
     private void estilizarTabla(JTable tabla) {
         tabla.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         tabla.setRowHeight(26);
@@ -188,6 +228,11 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Carga desde la BD todas las compras del cliente actual y las muestra en la tabla.
+     * Traduce los valores de método de pago de español ({@code TARJETA}/{@code EFECTIVO})
+     * a inglés ({@code CARD}/{@code CASH}) para la interfaz.
+     */
     public void cargarCompras() {
         AccesoBD accesoBD = new AccesoBD();
         Map<Integer, Compra> compras = new TreeMap<>();
@@ -258,6 +303,11 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Persiste en BD los cambios de método de pago realizados en la tabla de compras.
+     * Traduce de vuelta los valores de inglés a español para el almacenamiento.
+     * Al terminar, cierra el diálogo y regresa a {@link Vista_Cliente}.
+     */
     private void guardarCambios() {
         AccesoBD accesoBD = new AccesoBD();
         try {
@@ -276,6 +326,11 @@ public class Vista_MisCompras extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Gestiona los eventos de los botones {@code Close} y {@code Save changes}.
+     *
+     * @param e Evento de acción.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnCerrar) {

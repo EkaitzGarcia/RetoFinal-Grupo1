@@ -12,6 +12,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
+/**
+ * Diálogo modal que muestra todos los trabajadores registrados en una tabla.
+ * <p>
+ * Al hacer doble clic sobre una fila se cargan los datos del trabajador
+ * seleccionado en el formulario de {@link Vista_Admin} y se cierra este diálogo.
+ * </p>
+ * <p>Columnas mostradas: {@code NSS, Name, Surname, Phone, Email}.</p>
+ *
+ * @see Vista_Admin
+ * @see modelo.AccesoBD#getTodosLosTrabajaores(java.util.List)
+ */
 public class MostrarTrabajadores extends JDialog {
 
     private static final long serialVersionUID = 1L;

@@ -3,6 +3,24 @@ package modelo;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Clase de acceso a la base de datos del sistema Okapi.
+ * <p>
+ * Proporciona todos los métodos necesarios para realizar operaciones CRUD
+ * (Create, Read, Update, Delete) sobre las entidades del sistema:
+ * {@link Cliente}, {@link Producto}, {@link Trabajador} y {@link Compra}.
+ * </p>
+ * <p>
+ * La configuración de conexión (URL, usuario y contraseña) se lee
+ * automáticamente del fichero de propiedades {@code okapi.properties}
+ * al instanciar la clase.
+ * </p>
+ *
+ * @see Cliente
+ * @see Producto
+ * @see Trabajador
+ * @see Compra
+ */
 public class AccesoBD {
 	private ResourceBundle configFile;
 	private String urlBD;
@@ -68,6 +86,14 @@ public class AccesoBD {
 
 	final String DELETEPRODUCTO = "DELETE FROM PRODUCTO WHERE REF = ?";
 
+	/**
+	 * Constructor de {@code AccesoBD}.
+	 * <p>
+	 * Carga automáticamente los parámetros de conexión (URL, usuario y contraseña)
+	 * desde el fichero de propiedades {@code okapi.properties} ubicado en el
+	 * classpath del proyecto.
+	 * </p>
+	 */
 	public AccesoBD() {
 		this.configFile = ResourceBundle.getBundle("okapi");
 		this.urlBD = this.configFile.getString("Conn");
@@ -75,6 +101,14 @@ public class AccesoBD {
 		this.passwordBD = this.configFile.getString("DBPass");
 	}
 
+	/**
+	 * Busca un cliente en la base de datos por su DNI y lo añade al mapa proporcionado.
+	 *
+	 * @param dni      DNI del cliente a buscar (p. ej. {@code "12345678A"}).
+	 * @param clientes Mapa donde se almacenará el cliente encontrado,
+	 *                 indexado por su DNI.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public void getClientePorDni(String dni, Map<String, Cliente> clientes) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_CLIENTE_POR_DNI)) {
@@ -94,6 +128,14 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Recupera todos los productos de la base de datos mediante una consulta directa
+	 * a la tabla {@code PRODUCTO} y los almacena en el mapa proporcionado.
+	 *
+	 * @param productos Mapa donde se almacenarán los productos obtenidos,
+	 *                  indexados por su referencia ({@code REF}).
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public void getTodosProductos(Map<String, Producto> productos) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_TODOS_PRODUCTOS)) {
@@ -109,6 +151,24 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Inserta una compra con múltiples productos en la base de datos.
+	 * <p>
+	 * El proceso realiza tres operaciones en secuencia:
+	 * <ol>
+	 *   <li>Llama al procedimiento almacenado {@code COMPRA_COMPLETA} para crear la cabecera.</li>
+	 *   <li>Inserta cada línea de producto en la tabla {@code ESTA} mediante un batch.</li>
+	 *   <li>Actualiza el total de la compra usando la función {@code TOTALFINALCOMPRAAVANZADO}.</li>
+	 * </ol>
+	 * </p>
+	 *
+	 * @param dniCliente  DNI del cliente que realiza la compra.
+	 * @param metodoPago  Método de pago utilizado ({@code "TARJETA"} o {@code "EFECTIVO"}).
+	 * @param productos   Lista de productos incluidos en la compra.
+	 * @param cantidades  Lista de cantidades correspondientes a cada producto
+	 *                    (debe tener el mismo tamaño que {@code productos}).
+	 * @throws Exception Si ocurre un error de conexión o de operación SQL.
+	 */
 	public void insertarCompraMultiple(String dniCliente, String metodoPago, List<Producto> productos,
 			List<Integer> cantidades) throws Exception {
 		int nuevoId = 1;
@@ -145,6 +205,14 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Recupera todas las compras realizadas por un cliente identificado por su DNI.
+	 *
+	 * @param dni     DNI del cliente cuyas compras se desean obtener.
+	 * @param compras Mapa donde se almacenarán las compras encontradas,
+	 *                indexadas por el ID de compra.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public void getComprasPorCliente(String dni, Map<Integer, Compra> compras) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_COMPRAS_CLIENTE)) {
@@ -159,6 +227,17 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Recupera todas las compras registradas en el sistema, incluyendo los datos
+	 * del cliente asociado a cada una, ordenadas por ID de compra.
+	 * <p>
+	 * Cada elemento de la lista es un array de objetos con la siguiente estructura:
+	 * {@code [ID, FECHA, TOTAL, METODO_PAGO, DNI, NOMBRE_C, APELLIDO_C, TELEFONO_C, CORREO_C, DIRECCION]}
+	 * </p>
+	 *
+	 * @return Lista de arrays de objetos con los datos de compras y clientes.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public List<Object[]> getTodasLasComprasConCliente() throws Exception {
 		List<Object[]> filas = new ArrayList<>();
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
@@ -174,6 +253,19 @@ public class AccesoBD {
 		return filas;
 	}
 
+	/**
+	 * Recupera una compra específica junto con los datos del cliente asociado,
+	 * buscada por el identificador de la compra.
+	 * <p>
+	 * Cada elemento de la lista es un array de objetos con la siguiente estructura:
+	 * {@code [ID, FECHA, TOTAL, METODO_PAGO, DNI, NOMBRE_C, APELLIDO_C, TELEFONO_C, CORREO_C, DIRECCION]}
+	 * </p>
+	 *
+	 * @param id Identificador único de la compra a buscar.
+	 * @return Lista con un único array de objetos si se encuentra la compra,
+	 *         o lista vacía si no existe ninguna compra con ese ID.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public List<Object[]> getCompraConClientePorId(int id) throws Exception {
 		List<Object[]> filas = new ArrayList<>();
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
@@ -191,6 +283,17 @@ public class AccesoBD {
 		return filas;
 	}
 
+	/**
+	 * Recupera los productos asociados a una compra concreta.
+	 * <p>
+	 * Cada elemento de la lista es un array de objetos con la siguiente estructura:
+	 * {@code [REF, CANTIDAD, PRECIO, DESCUENTO]}
+	 * </p>
+	 *
+	 * @param idCompra Identificador de la compra cuyos productos se desean obtener.
+	 * @return Lista de arrays de objetos con los datos de cada línea de producto.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public List<Object[]> getProductosDeCompra(int idCompra) throws Exception {
 		List<Object[]> filas = new ArrayList<>();
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
@@ -206,6 +309,17 @@ public class AccesoBD {
 		return filas;
 	}
 
+	/**
+	 * Actualiza los datos personales de un cliente existente en la base de datos.
+	 * <p>
+	 * Modifica los campos: nombre, apellido, teléfono, correo y dirección.
+	 * El DNI se usa como clave de búsqueda y no se modifica.
+	 * </p>
+	 *
+	 * @param c Objeto {@link Cliente} con los nuevos datos. El DNI debe estar
+	 *          establecido para identificar al cliente a actualizar.
+	 * @throws Exception Si ocurre un error de conexión o de actualización SQL.
+	 */
 	public void actualizarCliente(Cliente c) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_ACTUALIZAR_CLIENTE)) {
@@ -219,6 +333,15 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Actualiza la fecha y el método de pago de una compra existente.
+	 *
+	 * @param id         Identificador único de la compra a actualizar.
+	 * @param fecha      Nueva fecha de la compra en formato {@code "yyyy-MM-dd"}.
+	 * @param metodoPago Nuevo método de pago ({@code "TARJETA"} o {@code "EFECTIVO"}).
+	 * @throws Exception Si ocurre un error de conexión, de formato de fecha
+	 *                   o de actualización SQL.
+	 */
 	public void actualizarCompra(int id, String fecha, String metodoPago) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_ACTUALIZAR_COMPRA)) {
@@ -229,6 +352,19 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Elimina una compra de la base de datos de forma transaccional.
+	 * <p>
+	 * El proceso elimina primero las líneas de la tabla {@code ESTA} asociadas
+	 * a la compra y, a continuación, elimina el registro de la tabla {@code COMPRA}.
+	 * Si cualquiera de las dos operaciones falla, se realiza un {@code rollback}
+	 * para mantener la consistencia de los datos.
+	 * </p>
+	 *
+	 * @param id Identificador único de la compra a eliminar.
+	 * @throws Exception Si ocurre un error de conexión o de eliminación SQL,
+	 *                   propagándose tras el rollback.
+	 */
 	public void eliminarCompra(int id) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD)) {
 			con.setAutoCommit(false);
@@ -249,6 +385,15 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Calcula el ahorro total acumulado por un cliente gracias a los descuentos
+	 * aplicados en sus compras, invocando la función SQL {@code AhorroCliente}.
+	 *
+	 * @param dni DNI del cliente cuyo ahorro se desea calcular.
+	 * @return Ahorro total en euros como valor {@code double},
+	 *         o {@code -1} si el cliente no existe o no tiene compras.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public double getAhorroCliente(String dni) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_AHORRO_CLIENTE)) {
@@ -261,11 +406,44 @@ public class AccesoBD {
 		return -1;
 	}
 
+	/**
+	 * Sobrecarga de {@link #insertarCompraMultiple(String, String, List, List)}
+	 * para un único producto.
+	 * <p>
+	 * <b>Nota:</b> Este método está pendiente de implementación.
+	 * </p>
+	 *
+	 * @param dni      DNI del cliente que realiza la compra.
+	 * @param metodo   Método de pago ({@code "TARJETA"} o {@code "EFECTIVO"}).
+	 * @param p        Producto a incluir en la compra.
+	 * @param cantidad Cantidad del producto.
+	 * @deprecated Pendiente de implementación. Usar
+	 *             {@link #insertarCompra(String, String, Producto, int, double)} en su lugar.
+	 */
 	public void insertarCompraMultiple(String dni, String metodo, Producto p, int cantidad) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Inserta una compra con un único producto en la base de datos.
+	 * <p>
+	 * El proceso:
+	 * <ol>
+	 *   <li>Obtiene el siguiente ID disponible consultando el máximo actual.</li>
+	 *   <li>Llama al procedimiento {@code COMPRA_COMPLETA} para crear la cabecera.</li>
+	 *   <li>Actualiza el total de la compra con el valor proporcionado.</li>
+	 *   <li>Inserta la línea del producto en la tabla {@code ESTA}.</li>
+	 * </ol>
+	 * </p>
+	 *
+	 * @param dniCliente  DNI del cliente que realiza la compra.
+	 * @param metodoPago  Método de pago ({@code "TARJETA"} o {@code "EFECTIVO"}).
+	 * @param producto    Producto a incluir en la compra.
+	 * @param cantidad    Cantidad del producto comprado.
+	 * @param total       Importe total de la compra en euros.
+	 * @throws Exception Si ocurre un error de conexión o de operación SQL.
+	 */
 	public void insertarCompra(String dniCliente, String metodoPago, Producto producto, int cantidad, double total)
 			throws Exception {
 
@@ -303,6 +481,12 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Recupera todos los trabajadores registrados en la base de datos.
+	 *
+	 * @param trabajadores Lista donde se añadirán los trabajadores obtenidos.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public void getTodosLosTrabajaores(List<Trabajador> trabajadores) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_TODOS_TRABAJADORES);
@@ -315,6 +499,14 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Recupera todos los clientes registrados en la base de datos
+	 * y los almacena en el mapa proporcionado.
+	 *
+	 * @param clientes Mapa donde se almacenarán los clientes obtenidos,
+	 *                 indexados por su DNI.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public void getTodosClientes(Map<String, Cliente> clientes) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_TODOS_CLIENTES);
@@ -334,12 +526,28 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Sobrecarga de {@link #getTodosClientes(Map)} que devuelve los clientes
+	 * en forma de lista en lugar de mapa, para facilitar su uso en componentes
+	 * de interfaz gráfica.
+	 *
+	 * @param lista Lista donde se añadirán todos los clientes obtenidos.
+	 * @throws Exception Si ocurre un error de conexión o de consulta SQL.
+	 */
 	public void getTodosClientes(List<Cliente> lista) throws Exception {
 		Map<String, Cliente> mapa = new HashMap<>();
 		getTodosClientes(mapa); // reutilizas el método original
 		lista.addAll(mapa.values()); // conviertes a lista para la UI
 	}
 
+	/**
+	 * Inserta un nuevo cliente en la base de datos.
+	 *
+	 * @param c Objeto {@link Cliente} con todos los datos del nuevo cliente
+	 *          (DNI, nombre, apellido, teléfono, correo y dirección).
+	 * @throws Exception Si ocurre un error de conexión, de inserción SQL
+	 *                   o si el DNI ya existe (clave primaria duplicada).
+	 */
 	public void insertarCliente(Cliente c) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				PreparedStatement stmt = con.prepareStatement(SQL_INSERTAR_CLIENTE)) {
@@ -353,6 +561,24 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Elimina un cliente de la base de datos de forma transaccional.
+	 * <p>
+	 * Para mantener la integridad referencial, el proceso realiza las siguientes
+	 * operaciones en orden dentro de una misma transacción:
+	 * <ol>
+	 *   <li>Elimina las líneas de {@code ESTA} asociadas a las compras del cliente.</li>
+	 *   <li>Elimina las compras del cliente en la tabla {@code COMPRA}.</li>
+	 *   <li>Elimina el registro del cliente en la tabla {@code CLIENTE}.</li>
+	 * </ol>
+	 * Si alguna operación falla, se realiza un {@code rollback} completo.
+	 * </p>
+	 *
+	 * @param c Objeto {@link Cliente} cuyo DNI se usará para identificar
+	 *          y eliminar todos sus registros asociados.
+	 * @throws Exception Si ocurre un error de conexión o de eliminación SQL,
+	 *                   propagándose tras el rollback.
+	 */
 	public void eliminarCliente(Cliente c) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD)) {
 			con.setAutoCommit(false);
@@ -430,6 +656,17 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Da de alta un trabajador invocando el procedimiento almacenado
+	 * {@code ALTATRABAJADOR_VALIDADO}, que realiza validaciones adicionales
+	 * en la base de datos (p. ej. comprobar si el NSS ya existe).
+	 *
+	 * @param t Objeto {@link Trabajador} con los datos del trabajador a registrar.
+	 * @return Mensaje de resultado devuelto por el procedimiento almacenado
+	 *         (p. ej. confirmación o aviso de duplicado),
+	 *         o {@code "OPERACIÓN COMPLETADA"} si no hay mensaje explícito.
+	 * @throws Exception Si ocurre un error de conexión o de ejecución del procedimiento.
+	 */
 	public String altaTrabajadorProcedimiento(Trabajador t) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 				CallableStatement cs = con.prepareCall(SQL_ALTA_TRABAJADOR_PROC)) {
@@ -451,6 +688,13 @@ public class AccesoBD {
 		return "OPERACIÓN COMPLETADA";
 	}
 
+	/**
+	 * Actualiza únicamente el método de pago de una compra existente.
+	 *
+	 * @param idCompra Identificador único de la compra a modificar.
+	 * @param metodo   Nuevo método de pago ({@code "TARJETA"} o {@code "EFECTIVO"}).
+	 * @throws Exception Si ocurre un error de conexión o de actualización SQL.
+	 */
 	public void actualizarMetodoPago(int idCompra, String metodo) throws Exception {
 
 		String sql = "UPDATE COMPRA SET METODO_PAGO = ? WHERE ID = ?";
@@ -469,6 +713,19 @@ public class AccesoBD {
 
 	}
 
+	/**
+	 * Carga todos los productos disponibles invocando el procedimiento almacenado
+	 * {@code VerProductos()}, que utiliza un cursor internamente.
+	 * <p>
+	 * El procedimiento puede devolver múltiples ResultSets (uno por producto);
+	 * este método los itera todos mediante {@link CallableStatement#getMoreResults()}
+	 * para construir el mapa completo de productos.
+	 * </p>
+	 *
+	 * @param productos Mapa donde se almacenarán los productos obtenidos,
+	 *                  indexados por un entero autoincremental.
+	 * @throws Exception Si ocurre un error de conexión o de ejecución del procedimiento.
+	 */
 	public void verProductos(Map<Integer, Producto> productos) throws Exception {
 		System.out.println("[DEBUG] Intentando conectar a la BD...");
 
@@ -504,6 +761,14 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Inserta un nuevo producto en la base de datos.
+	 *
+	 * @param producto Objeto {@link Producto} con los datos del nuevo producto
+	 *                 (nombre, referencia, precio y descuento).
+	 * @throws Exception Si ocurre un error de conexión, de inserción SQL
+	 *                   o si la referencia ya existe (clave primaria duplicada).
+	 */
 	public void insertarProducto(Producto producto) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, this.userBD, this.passwordBD);
 				PreparedStatement stmt = con.prepareStatement(INSERTPRODUCTO)) {
@@ -517,6 +782,18 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Actualiza los datos de un producto existente en la base de datos.
+	 * <p>
+	 * Modifica los campos: nombre, precio y descuento.
+	 * La referencia ({@code REF}) se utiliza como clave de búsqueda y no se modifica.
+	 * </p>
+	 *
+	 * @param producto Objeto {@link Producto} con los datos actualizados.
+	 *                 La referencia debe estar establecida para identificar
+	 *                 el producto a modificar.
+	 * @throws Exception Si ocurre un error de conexión o de actualización SQL.
+	 */
 	public void actualizarProducto(Producto producto) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, this.userBD, this.passwordBD);
 				PreparedStatement stmt = con.prepareStatement(UPDATEPRODUCTO)) {
@@ -529,6 +806,17 @@ public class AccesoBD {
 		}
 	}
 
+	/**
+	 * Elimina un producto de la base de datos identificado por su referencia.
+	 * <p>
+	 * <b>Atención:</b> Si el producto está referenciado en alguna compra
+	 * (tabla {@code ESTA}), la operación fallará por integridad referencial.
+	 * </p>
+	 *
+	 * @param ref Referencia única del producto a eliminar (clave primaria).
+	 * @throws Exception Si ocurre un error de conexión, de eliminación SQL
+	 *                   o por restricción de integridad referencial.
+	 */
 	public void eliminarProducto(String ref) throws Exception {
 		try (Connection con = DriverManager.getConnection(urlBD, this.userBD, this.passwordBD);
 				PreparedStatement stmt = con.prepareStatement(DELETEPRODUCTO)) {

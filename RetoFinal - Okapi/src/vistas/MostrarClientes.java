@@ -12,6 +12,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
+/**
+ * Diálogo modal que muestra todos los clientes registrados en una tabla.
+ * <p>
+ * Al hacer doble clic sobre una fila se cargan los datos del cliente
+ * seleccionado en el formulario de {@link Vista_Admin} y se cierra este diálogo.
+ * </p>
+ * <p>Columnas mostradas: {@code DNI, Name, Surname, Phone, Email, Address}.</p>
+ *
+ * @see Vista_Admin
+ * @see modelo.AccesoBD#getTodosClientes(java.util.List)
+ */
 public class MostrarClientes extends JDialog {
 
     private static final long serialVersionUID = 1L;

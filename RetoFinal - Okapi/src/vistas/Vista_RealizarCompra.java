@@ -33,6 +33,23 @@ import modelo.Cliente;
 import modelo.Producto;
 import javax.swing.JTable;
 
+/**
+ * Diálogo para que un cliente realice una nueva compra.
+ * <p>
+ * Flujo de uso:
+ * </p>
+ * <ol>
+ *   <li>El cliente busca productos por referencia o los visualiza todos.</li>
+ *   <li>Filtra opcionalmente los productos con descuento.</li>
+ *   <li>Selecciona uno o varios productos de la lista, elige la cantidad
+ *       y los añade al carrito.</li>
+ *   <li>Selecciona el método de pago (tarjeta/efectivo) y acepta los términos.</li>
+ *   <li>Pulsa <b>Confirm order</b> para persistir la compra en BD.</li>
+ * </ol>
+ *
+ * @see Vista_Cliente
+ * @see modelo.AccesoBD#insertarCompra(String, String, modelo.Producto, int, double)
+ */
 public class Vista_RealizarCompra extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -62,6 +79,12 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
     private static final Color COLOR_LISTA_BG      = new Color(255, 252, 248);
     private static final Color COLOR_TABLA_HEADER  = new Color(140, 100, 65);
 
+    /**
+     * Reproduce un efecto de sonido (.wav) desde los recursos del classpath.
+     * Falla silenciosamente si el recurso no existe o se produce cualquier error.
+     *
+     * @param recurso Ruta del recurso relativa al classpath.
+     */
     private static void reproducirSonido(String recurso) {
         try {
             URL url = Vista_RealizarCompra.class.getResource(recurso);
@@ -73,6 +96,12 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         } catch (Exception ex) { }
     }
 
+    /**
+     * Construye el diálogo de realizar compra para el cliente indicado.
+     * Carga automáticamente los productos disponibles al inicializarse.
+     *
+     * @param cliente Objeto {@link modelo.Cliente} autenticado que realiza la compra.
+     */
     public Vista_RealizarCompra(Cliente cliente) {
         this.clienteActual = cliente;
 
@@ -229,6 +258,17 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         cargarProductos();
     }
 
+    /**
+     * Crea un botón estilizado con colores configurables.
+     *
+     * @param texto  Texto del botón.
+     * @param x      Coordenada X.
+     * @param y      Coordenada Y.
+     * @param w      Ancho.
+     * @param h      Alto.
+     * @param fondo  Color de fondo del botón.
+     * @return {@link JButton} configurado.
+     */
     private JButton crearBoton(String texto, int x, int y, int w, int h, Color fondo) {
         JButton btn = new JButton(texto);
         btn.setBounds(x, y, w, h);
@@ -242,6 +282,10 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Carga todos los productos disponibles desde la BD en el mapa interno
+     * y actualiza la lista visual.
+     */
     public void cargarProductos() {
         AccesoBD accesoBD = new AccesoBD();
         try {
@@ -252,6 +296,11 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Actualiza la lista visual con los productos del mapa interno.
+     * Si el filtro de descuento está activo, muestra únicamente
+     * aquellos productos con descuento mayor que 0.
+     */
     private void mostrarTodosProductos() {
         modeloLista.clear();
         for (Producto p : todosProductos.values()) {
@@ -267,6 +316,13 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Calcula el importe total de una línea de compra aplicando el descuento.
+     *
+     * @param p        Producto seleccionado.
+     * @param cantidad Cantidad de unidades.
+     * @return Total de la línea con descuento aplicado, en euros.
+     */
     public double calcularTotal(Producto p, int cantidad) {
         double precio = p.getPrecio();
         if (p.getDescuento() > 0) {
@@ -275,6 +331,15 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         return precio * cantidad;
     }
 
+    /**
+     * Procesa la compra cuando el cliente pulsa <b>Confirm order</b>.
+     * <p>
+     * Recorre cada línea del carrito e invoca
+     * {@link modelo.AccesoBD#insertarCompra} por cada producto.
+     * Si todo va bien, reproduce un sonido de éxito, muestra el total
+     * y regresa a {@link Vista_Cliente}.
+     * </p>
+     */
     public void comprar() {
         if (modeloTabla.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "Add at least one product to your cart.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -313,6 +378,11 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Filtra la lista para mostrar únicamente el producto cuya referencia
+     * coincide con el texto introducido en el campo de búsqueda.
+     * Muestra un aviso si no se encuentra ningún producto con esa referencia.
+     */
     private void buscarProducto() {
         String ref = txtBuscarRef.getText();
         modeloLista.clear();
@@ -335,6 +405,11 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Añade el producto seleccionado en la lista al carrito con la cantidad elegida.
+     * Si el producto ya estaba en el carrito, acumula la cantidad en lugar de
+     * crear una fila duplicada.
+     */
     private void agregarAlCarrito() {
         String seleccion = listaProductos.getSelectedValue();
         if (seleccion == null) {
@@ -367,6 +442,19 @@ public class Vista_RealizarCompra extends JDialog implements ActionListener {
         });
     }
 
+    /**
+     * Gestiona todos los eventos de acción del diálogo:
+     * <ul>
+     *   <li>{@code btnComprar} → llama a {@link #comprar()}.</li>
+     *   <li>{@code btnCancelar} → cierra éste y regresa a {@link Vista_Cliente}.</li>
+     *   <li>{@code chkDescuento} → filtra la lista de productos.</li>
+     *   <li>{@code btnBuscar} → busca por referencia.</li>
+     *   <li>{@code btnAgregarCarrito} → añade al carrito.</li>
+     *   <li>{@code btnMostrarTodos} → muestra todos los productos.</li>
+     * </ul>
+     *
+     * @param e Evento de acción.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnComprar) {

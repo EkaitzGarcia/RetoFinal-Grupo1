@@ -35,10 +35,23 @@ import modelo.Cliente;
 import modelo.Trabajador;
 
 /**
- * Diálogo de administración del sistema.
- * Permite gestionar clientes y trabajadores mediante pestañas.
+ * Diálogo de administración del sistema Okapi.
+ * <p>
+ * Organizado en tres pestañas:
+ * </p>
+ * <ul>
+ *   <li><b>Home</b> – Acceso rápido a la lista de clientes y trabajadores.</li>
+ *   <li><b>Clients</b> – Formulario CRUD completo para gestionar clientes.</li>
+ *   <li><b>Workers</b> – Formulario CRUD completo para gestionar trabajadores.</li>
+ * </ul>
+ * <p>
+ * Implementa validación de formato para DNI, NSS, teléfono y correo electrónico
+ * antes de cualquier operación de escritura en la base de datos.
+ * </p>
  *
- * @version 1.0
+ * @see MostrarClientes
+ * @see MostrarTrabajadores
+ * @see modelo.AccesoBD
  */
 public class Vista_Admin extends JDialog implements ActionListener {
 
@@ -83,6 +96,13 @@ public class Vista_Admin extends JDialog implements ActionListener {
     private Ventana_principal1 vPrincipal;
 
     // ── Método utilitario para reproducir sonidos
+    /**
+     * Reproduce un efecto de sonido (.wav) desde los recursos del classpath.
+     * Falla silenciosamente si el recurso no existe o se produce cualquier error.
+     *
+     * @param recurso Ruta del recurso relativa al classpath
+     *                (p. ej. {@code "/resources/excepcion.wav"}).
+     */
     public static void reproducirSonido(String recurso) {
         try {
             java.net.URL url = Vista_Admin.class.getResource(recurso);
@@ -96,6 +116,13 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Construye el diálogo de administración y configura todas sus pestañas,
+     * formularios y botones.
+     *
+     * @param padre Ventana principal de la aplicación que actúa como propietario
+     *              del diálogo (puede ser {@code null} en modo de prueba).
+     */
     public Vista_Admin(Ventana_principal1 padre) {
         this.vPrincipal = padre;
         setTitle("Administrator Panel");
@@ -456,6 +483,11 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarTrab.setEnabled(false);
     }
 
+    /**
+     * Gestiona los eventos de todos los botones del diálogo.
+     *
+     * @param e Evento de acción.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnVerClientes)) {
@@ -481,6 +513,10 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Da de alta un nuevo cliente leyendo los campos del formulario.
+     * Valida DNI, teléfono y correo antes de persistir.
+     */
     private void altaCliente() {
         if (!validarCliente()) return;
         try {
@@ -516,6 +552,10 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Elimina el cliente cuyo DNI está en el campo {@code txtDniC}.
+     * Opera dentro de una transacción que elimina también sus compras.
+     */
     private void bajaCliente() {
         Cliente c = new Cliente();
         c.setDni(txtDniC.getText().trim());
@@ -531,6 +571,10 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Actualiza los datos del cliente seleccionado con los valores del formulario.
+     * Valida teléfono y correo antes de persistir.
+     */
     private void modificarCliente() {
         if (!validarCliente()) return;
         try {
@@ -556,6 +600,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /** Limpia todos los campos del formulario de clientes y restaura el estado inicial de los botones. */
     private void limpiarClientes() {
         txtDniC.setText("");
         txtDniC.setEditable(true);
@@ -569,6 +614,11 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarCliente.setEnabled(false);
     }
 
+    /**
+     * Da de alta un nuevo trabajador invocando el procedimiento almacenado
+     * {@code ALTATRABAJADOR_VALIDADO} a través de {@link controlador.Principal#altaTrabajador}.
+     * Valida NSS, teléfono y correo antes de persistir.
+     */
     private void altaTrabajador() {
         if (!validarTrabajador()) return;
         try {
@@ -606,6 +656,9 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Elimina el trabajador cuyo NSS está en el campo {@code txtNss}.
+     */
     private void bajaTrabajador() {
         Trabajador t = new Trabajador(txtNss.getText().trim(), "", "", "", "");
         Principal.bajaTrabajador(t);
@@ -614,6 +667,10 @@ public class Vista_Admin extends JDialog implements ActionListener {
         tabbedPane.setSelectedComponent(panelInicio);
     }
 
+    /**
+     * Actualiza los datos del trabajador seleccionado con los valores del formulario.
+     * Valida teléfono y correo antes de persistir.
+     */
     private void modificarTrabajador() {
         if (!validarTrabajador()) return;
         try {
@@ -639,6 +696,7 @@ public class Vista_Admin extends JDialog implements ActionListener {
         }
     }
 
+    /** Limpia todos los campos del formulario de trabajadores y restaura el estado inicial de los botones. */
     private void limpiarTrabajadores() {
         txtNss.setText("");
         txtNss.setEditable(true);
@@ -651,6 +709,11 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarTrab.setEnabled(false);
     }
 
+    /**
+     * Comprueba que todos los campos obigatorios del formulario de clientes estén rellenos.
+     *
+     * @return {@code true} si todos los campos tienen valor; {@code false} en caso contrario.
+     */
     private boolean validarCliente() {
         if (txtDniC.getText().trim().isEmpty() ||
             txtNombreC.getText().trim().isEmpty() ||
@@ -665,6 +728,11 @@ public class Vista_Admin extends JDialog implements ActionListener {
         return true;
     }
 
+    /**
+     * Comprueba que todos los campos obligatorios del formulario de trabajadores estén rellenos.
+     *
+     * @return {@code true} si todos los campos tienen valor; {@code false} en caso contrario.
+     */
     private boolean validarTrabajador() {
         if (txtNss.getText().trim().isEmpty() ||
             txtNombreT.getText().trim().isEmpty() ||
@@ -678,30 +746,66 @@ public class Vista_Admin extends JDialog implements ActionListener {
         return true;
     }
 
+    /**
+     * Valida que el DNI tenga el formato correcto: 8 dígitos seguidos de una letra mayúscula.
+     *
+     * @param dni DNI a validar.
+     * @throws excepciones.DniException Si el formato no es válido.
+     */
     private void validarDni(String dni) throws DniException {
         if (!dni.matches("\\d{8}[A-Z]")) {
             throw new DniException("Incorrect DNI format (12345678A)");
         }
     }
 
+    /**
+     * Valida que el correo electrónico tenga un formato estándar.
+     *
+     * @param email Correo a validar.
+     * @throws excepciones.FormatoIncorrectoException Si el formato no es válido.
+     */
     public static void validarEmail(String email) throws FormatoIncorrectoException {
         Pattern modelo = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
         Matcher matcher = modelo.matcher(email);
         if (!matcher.matches()) { throw new FormatoIncorrectoException("Incorrect Gmail format"); }
     }
 
+    /**
+     * Valida que el NSS tenga exactamente 12 dígitos numéricos.
+     *
+     * @param nss NSS a validar.
+     * @throws excepciones.NssException Si el formato no es válido.
+     */
     public static void validarNss(String nss) throws NssException {
         if (!nss.matches("\\d{12}")) {
             throw new NssException("NSS must have exactly 12 numbers");
         }
     }
 
+    /**
+     * Valida que el teléfono tenga exactamente 9 dígitos numéricos.
+     *
+     * @param telefono Teléfono a validar.
+     * @throws excepciones.TelefonoException Si el formato no es válido.
+     */
     public static void validarTelefono(String telefono) throws TelefonoException {
         if (!telefono.matches("\\d{9}")) {
             throw new TelefonoException("The phone must have exactly 9 numbers");
         }
     }
 
+    /**
+     * Precarga los campos del formulario de clientes con los datos del cliente seleccionado
+     * desde {@link MostrarClientes}, activa los botones de baja y modificación
+     * y desactiva el de alta.
+     *
+     * @param dni       DNI del cliente.
+     * @param nombre    Nombre del cliente.
+     * @param ape       Apellido del cliente.
+     * @param tel       Teléfono del cliente.
+     * @param correo    Correo electrónico del cliente.
+     * @param direccion Dirección del cliente.
+     */
     public void cargarDatosCliente(String dni, String nombre, String ape, String tel, String correo, String direccion) {
         tabbedPane.setSelectedComponent(panelClientes);
         txtDniC.setText(dni);
@@ -716,6 +820,17 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarCliente.setEnabled(true);
     }
 
+    /**
+     * Precarga los campos del formulario de trabajadores con los datos del trabajador seleccionado
+     * desde {@link MostrarTrabajadores}, activa los botones de baja y modificación
+     * y desactiva el de alta.
+     *
+     * @param nss    Número de la Seguridad Social del trabajador.
+     * @param nombre Nombre del trabajador.
+     * @param ape    Apellido del trabajador.
+     * @param tel    Teléfono del trabajador.
+     * @param correo Correo electrónico del trabajador.
+     */
     public void cargarDatosTrabajador(String nss, String nombre, String ape, String tel, String correo) {
         tabbedPane.setSelectedComponent(panelTrabajadores);
         txtNss.setText(nss);
@@ -729,6 +844,11 @@ public class Vista_Admin extends JDialog implements ActionListener {
         btnModificarTrab.setEnabled(true);
     }
 
+    /**
+     * Punto de entrada para probar el diálogo de administración de forma aislada.
+     *
+     * @param args Argumentos de línea de comandos (no se usan).
+     */
     public static void main(String[] args) {
         new Vista_Admin(null).setVisible(true);
     }

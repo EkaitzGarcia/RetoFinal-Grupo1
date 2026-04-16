@@ -17,6 +17,22 @@ import java.awt.event.*;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Diálogo que muestra el catálogo completo de productos en una tabla.
+ * <p>
+ * Permite:
+ * </p>
+ * <ul>
+ *   <li>Consultar todos los productos (Referencia, Nombre, Precio, Descuento).</li>
+ *   <li>Abrir el detalle de un producto con doble clic → {@link Detalle_Producto}.</li>
+ *   <li>Dar de alta un nuevo producto → {@link Alta_Producto}.</li>
+ *   <li>Volver a la ventana principal → {@link Ventana_principal1}.</li>
+ * </ul>
+ *
+ * @see Detalle_Producto
+ * @see Alta_Producto
+ * @see modelo.AccesoBD#verProductos(java.util.Map)
+ */
 public class Vista_Producto extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -32,6 +48,12 @@ public class Vista_Producto extends JDialog implements ActionListener {
     private static Ventana_principal1 principal;
     private Alta_Producto alta;
 
+    /**
+     * Reproduce un efecto de sonido (.wav) desde los recursos del classpath.
+     * Falla silenciosamente si el recurso no existe o se produce cualquier error.
+     *
+     * @param recurso Ruta del recurso relativa al classpath.
+     */
     private static void reproducirSonido(String recurso) {
         try {
             java.net.URL url = Vista_Producto.class.getResource(recurso);
@@ -48,6 +70,12 @@ public class Vista_Producto extends JDialog implements ActionListener {
     private JTable table;
     private DefaultTableModel modeloTabla;
 
+    /**
+     * Punto de entrada para probar el diálogo de forma aislada.
+     * Al cerrar la ventana se redirige a {@link Ventana_principal1}.
+     *
+     * @param args Argumentos de línea de comandos (no se usan).
+     */
     public static void main(String[] args) {
         try {
             Vista_Producto dialog = new Vista_Producto();
@@ -66,6 +94,11 @@ public class Vista_Producto extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Construye el diálogo del catálogo de productos.
+     * Inicializa la tabla, el botón de volver, el botón de alta
+     * y el listener de doble clic para abrir {@link Detalle_Producto}.
+     */
     public Vista_Producto() {
         setTitle("Product list: Okapi");
         setBounds(100, 100, 1330, 754);
@@ -175,6 +208,12 @@ public class Vista_Producto extends JDialog implements ActionListener {
         cargarProductos();
     }
 
+    /**
+     * Crea un botón estilizado con la paleta de colores de la aplicación y efecto hover.
+     *
+     * @param label Texto del botón.
+     * @return {@link JButton} configurado.
+     */
     private JButton createButton(String label) {
         JButton btn = new JButton(label);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -206,6 +245,12 @@ public class Vista_Producto extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Recarga el catálogo de productos desde la BD invocando
+     * {@link modelo.AccesoBD#verProductos} y actualiza la tabla.
+     * Se llama al abrir el diálogo y también tras cerrar
+     * {@link Detalle_Producto} o {@link Alta_Producto} para reflejar cambios.
+     */
     private void cargarProductos() {
         Map<Integer, Producto> productos = new TreeMap<>();
         AccesoBD acceso = new AccesoBD();
@@ -230,6 +275,15 @@ public class Vista_Producto extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Gestiona los botones {@code Back} y {@code Add Product}.
+     * <ul>
+     *   <li>{@code Back} → reproduce sonido, regresa a {@link Ventana_principal1} y cierra éste.</li>
+     *   <li>{@code Add Product} → abre {@link Alta_Producto} y recarga la tabla al cerrarse.</li>
+     * </ul>
+     *
+     * @param e Evento de acción.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnVolver) {

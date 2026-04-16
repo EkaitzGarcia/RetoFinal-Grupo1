@@ -25,6 +25,17 @@ import javax.swing.border.LineBorder;
 import modelo.AccesoBD;
 import modelo.Producto;
 
+/**
+ * Diálogo modal para dar de alta un nuevo producto en el catálogo Okapi.
+ * <p>
+ * Presenta un formulario con cuatro campos obligatorios:
+ * <b>Referencia</b>, <b>Nombre</b>, <b>Precio</b> y <b>Descuento</b>.
+ * Valida los datos antes de persistirlos mediante {@link modelo.AccesoBD#insertarProducto}.
+ * </p>
+ *
+ * @see modelo.AccesoBD#insertarProducto(modelo.Producto)
+ * @see Vista_Producto
+ */
 public class Alta_Producto extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +54,13 @@ public class Alta_Producto extends JDialog implements ActionListener {
     private JLabel lblRef, lblNom, lblPre, lblDesc;
     private JTextField refText, nomText, preText, descText;
 
+    /**
+     * Reproduce un efecto de sonido (.wav) desde los recursos del classpath.
+     * Falla silenciosamente si el recurso no existe o se produce cualquier error.
+     *
+     * @param recurso Ruta del recurso relativa al classpath
+     *                (p. ej. {@code "/resources/alta.wav"}).
+     */
     private static void reproducirSonido(String recurso) {
         try {
             URL url = Alta_Producto.class.getResource(recurso);
@@ -54,6 +72,11 @@ public class Alta_Producto extends JDialog implements ActionListener {
         } catch (Exception ex) { }
     }
 
+    /**
+     * Punto de entrada para probar el diálogo de forma aislada.
+     *
+     * @param args Argumentos de línea de comandos (no se usan).
+     */
     public static void main(String[] args) {
         try {
             Alta_Producto dialog = new Alta_Producto();
@@ -64,6 +87,10 @@ public class Alta_Producto extends JDialog implements ActionListener {
         }
     }
 
+    /**
+     * Construye y configura el formulario de alta de producto.
+     * Inicializa etiquetas, campos de texto y los botones {@code Add} y {@code Cancel}.
+     */
     public Alta_Producto() {
         setTitle("Add Product: Okapi");
         setBounds(100, 100, 450, 320);
@@ -126,6 +153,11 @@ public class Alta_Producto extends JDialog implements ActionListener {
         root.add(btnAlta);
     }
 
+    /**
+     * Crea y devuelve un campo de texto con el estilo visual de la aplicación.
+     *
+     * @return {@link JTextField} estilizado listo para añadir al panel.
+     */
     private JTextField createField() {
         JTextField field = new JTextField();
         field.setBackground(FIELD_BG);
@@ -138,6 +170,12 @@ public class Alta_Producto extends JDialog implements ActionListener {
         return field;
     }
 
+    /**
+     * Crea un botón estilizado con efecto hover.
+     *
+     * @param label Texto que mostrará el botón.
+     * @return {@link JButton} configurado con la paleta de colores de la aplicación.
+     */
     private JButton createButton(String label) {
         JButton btn = new JButton(label);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -169,6 +207,16 @@ public class Alta_Producto extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Gestiona los eventos de los botones {@code Add} y {@code Cancel}.
+     * <ul>
+     *   <li>{@code Add} — valida los campos, construye un {@link modelo.Producto}
+     *       y lo persiste en BD vía {@link modelo.AccesoBD#insertarProducto}.</li>
+     *   <li>{@code Cancel} — cierra el diálogo sin guardar cambios.</li>
+     * </ul>
+     *
+     * @param e Evento de acción generado por el botón pulsado.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnAlta) {

@@ -10,6 +10,25 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+/**
+ * Diálogo modal para consultar, modificar y eliminar un {@link modelo.Producto} existente.
+ * <p>
+ * Se abre con doble clic desde {@link Vista_Producto} y muestra los datos
+ * del producto seleccionado. El campo <b>Referencia</b> es de solo lectura;
+ * los demás (Nombre, Precio, Descuento) son editables.
+ * </p>
+ * <ul>
+ *   <li><b>Save</b> – valida y actualiza el producto mediante
+ *       {@link modelo.AccesoBD#actualizarProducto}.</li>
+ *   <li><b>Delete</b> – solicita confirmación y elimina el producto mediante
+ *       {@link modelo.AccesoBD#eliminarProducto}.</li>
+ *   <li><b>Cancel</b> – cierra sin guardar cambios.</li>
+ * </ul>
+ *
+ * @see Vista_Producto
+ * @see modelo.AccesoBD#actualizarProducto(modelo.Producto)
+ * @see modelo.AccesoBD#eliminarProducto(String)
+ */
 public class Detalle_Producto extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +50,14 @@ public class Detalle_Producto extends JDialog implements ActionListener {
 
     private String refOriginal;
 
+    /**
+     * Construye el diálogo de detalle para el producto indicado.
+     *
+     * @param ref       Referencia única del producto (será de solo lectura).
+     * @param nombre    Nombre actual del producto.
+     * @param precio    Precio actual del producto como cadena (p. ej. {@code "29.99"}).
+     * @param descuento Porcentaje de descuento actual (0 si no tiene).
+     */
     public Detalle_Producto(String ref, String nombre, String precio, int descuento) {
         this.refOriginal = ref;
 
@@ -106,6 +133,14 @@ public class Detalle_Producto extends JDialog implements ActionListener {
         root.add(btnGuardar);
     }
 
+    /**
+     * Crea un campo de texto con el contenido y estado de edición indicados.
+     *
+     * @param value    Valor inicial del campo.
+     * @param editable {@code true} si el campo debe ser editable;
+     *                 {@code false} para mostrarlo como solo lectura con fondo atenuado.
+     * @return {@link JTextField} configurado.
+     */
     private JTextField createField(String value, boolean editable) {
         JTextField field = new JTextField(value);
         field.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -126,6 +161,15 @@ public class Detalle_Producto extends JDialog implements ActionListener {
         return field;
     }
 
+    /**
+     * Crea un botón estilizado con colores personalizables y efecto hover.
+     *
+     * @param label       Texto del botón.
+     * @param bgColor     Color de fondo en estado normal.
+     * @param hoverColor  Color de fondo al pasar el ratón por encima.
+     * @param borderColor Color del borde del botón.
+     * @return {@link JButton} completamente configurado.
+     */
     private JButton createButton(String label, Color bgColor, Color hoverColor, Color borderColor) {
         JButton btn = new JButton(label);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -157,6 +201,11 @@ public class Detalle_Producto extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Gestiona los eventos de los botones {@code Save}, {@code Delete} y {@code Cancel}.
+     *
+     * @param e Evento de acción generado por el botón pulsado.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 

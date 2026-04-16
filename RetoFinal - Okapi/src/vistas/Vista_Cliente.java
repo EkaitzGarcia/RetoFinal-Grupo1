@@ -27,6 +27,17 @@ import javax.swing.SwingConstants;
 
 import modelo.Cliente;
 
+/**
+ * Diálogo personal del cliente que muestra su nombre y ofrece acceso a:
+ * <ul>
+ *   <li><b>Make a Purchase</b> – abre {@link Vista_RealizarCompra}.</li>
+ *   <li><b>My Purchases</b> – abre {@link Vista_MisCompras} con el historial.</li>
+ *   <li><b>Exit</b> – cierra la sesión y regresa a {@link Ventana_principal1}.</li>
+ * </ul>
+ *
+ * @see Vista_RealizarCompra
+ * @see Vista_MisCompras
+ */
 public class Vista_Cliente extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +55,12 @@ public class Vista_Cliente extends JDialog implements ActionListener {
     private static final Color COLOR_TEXT_DARK  = new Color(50, 30, 15);
     private static final Color COLOR_TEXT_LIGHT = Color.WHITE;
 
+    /**
+     * Reproduce un efecto de sonido (.wav) desde los recursos del classpath.
+     * Falla silenciosamente si el recurso no existe o se produce cualquier error.
+     *
+     * @param recurso Ruta del recurso relativa al classpath.
+     */
     static void reproducirSonido(String recurso) {
         try {
             URL url = Vista_Cliente.class.getResource(recurso);
@@ -55,6 +72,12 @@ public class Vista_Cliente extends JDialog implements ActionListener {
         } catch (Exception ex) { }
     }
 
+    /**
+     * Construye el panel personal del cliente con saludo, imagen corporativa
+     * y las tarjetas de navegación.
+     *
+     * @param cliente Objeto {@link modelo.Cliente} con los datos del cliente autenticado.
+     */
     public Vista_Cliente(Cliente cliente) {
         this.clienteActual = cliente;
         setTitle("OKAPI - Client Panel");
@@ -122,6 +145,17 @@ public class Vista_Cliente extends JDialog implements ActionListener {
         gradPanel.add(btnSalir);
     }
 
+    /**
+     * Crea una tarjeta de navegación con imagen y texto.
+     *
+     * @param texto   Etiqueta del botón.
+     * @param imgPath Ruta de la imagen decorativa relativa al classpath.
+     * @param x       Coordenada X del botón.
+     * @param y       Coordenada Y del botón.
+     * @param w       Ancho del botón en píxeles.
+     * @param h       Alto del botón en píxeles.
+     * @return {@link JButton} configurado como tarjeta con efecto hover.
+     */
     private JButton crearTarjeta(String texto, String imgPath, int x, int y, int w, int h) {
         JButton btn = new JButton();
         btn.setLayout(null);
@@ -157,6 +191,17 @@ public class Vista_Cliente extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Crea una tarjeta de navegación con emoji, título y subtítulo de texto.
+     *
+     * @param titulo    Título principal del botón.
+     * @param subtitulo Descripción secundaria del botón.
+     * @param x         Coordenada X del botón.
+     * @param y         Coordenada Y del botón.
+     * @param w         Ancho del botón en píxeles.
+     * @param h         Alto del botón en píxeles.
+     * @return {@link JButton} configurado con efecto hover.
+     */
     private JButton crearTarjetaTexto(String titulo, String subtitulo, int x, int y, int w, int h) {
         JButton btn = new JButton();
         btn.setLayout(null);
@@ -194,6 +239,16 @@ public class Vista_Cliente extends JDialog implements ActionListener {
         return btn;
     }
 
+    /**
+     * Gestiona los botones de la vista del cliente.
+     * <ul>
+     *   <li>{@code btnRealizarCompra} → abre {@link Vista_RealizarCompra} y cierra ésta.</li>
+     *   <li>{@code btnVerCompras} → abre {@link Vista_MisCompras} y cierra ésta.</li>
+     *   <li>{@code btnSalir} → reproduce sonido, cierra ésta y reabre {@link Ventana_principal1}.</li>
+     * </ul>
+     *
+     * @param e Evento de acción.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnRealizarCompra) {
